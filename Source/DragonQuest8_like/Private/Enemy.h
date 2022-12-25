@@ -6,17 +6,14 @@
 #include "Enemy.generated.h"
 
 
-
-/**
- *
- */
 USTRUCT(BlueprintType)
 
 struct FEnemy
 {
 	GENERATED_BODY()
 
-		int32 HP;
+	int32 HP;
+	int32 MP;
 	int32 Attack;
 	int32 Defense;
 	int32 M_Attack;

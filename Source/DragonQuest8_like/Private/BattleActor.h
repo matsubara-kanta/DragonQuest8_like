@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Enemy.h"
+#include "BattleWidget.h"
 #include "BattleActor.generated.h"
 
 #define DURATION 2.0f
@@ -18,21 +19,23 @@ class ABattleActor : public AActor
 public:
 	// Sets default values for this actor's properties
 	ABattleActor();
+	virtual void Tick(float DeltaTime) override;
+
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
+	TSubclassOf<UUserWidget> WBP_Battle;
+	UBattleWidget* battle_w;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 private:
 	void SetupInput();
 	void PressedSpaceBar();
 	void PrintStructure(const FEnemy& enemy);
 	void PressedActionPrintStructure();
+	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,10,"Corpse_Melee"},
+	{20,20,20,20,20,20,20,"Corpse_Sword"},{30,30,30,30,30,30,30,"Large_Sword3"} };
 
-	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,"Corpse_Melee"},
-	{20,20,20,20,20,20,"Corpse_Sword"},{30,30,30,30,30,30,"Large_Sword3"} };
 };

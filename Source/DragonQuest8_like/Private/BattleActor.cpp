@@ -17,6 +17,11 @@ void ABattleActor::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupInput();
+	battle_w = CreateWidget<UBattleWidget>(GetWorld(), WBP_Battle);
+	ensure(battle_w);
+	if (battle_w) {
+		battle_w->AddToViewport();
+	}
 }
 
 void ABattleActor::SetupInput()
