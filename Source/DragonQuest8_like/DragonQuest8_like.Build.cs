@@ -4,10 +4,11 @@ using UnrealBuildTool;
 
 public class DragonQuest8_like : ModuleRules
 {
-	public DragonQuest8_like(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    public DragonQuest8_like(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput" });
-	}
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", "SlateCore", "Slate" });
+        PublicDependencyModuleNames.AddRange(new string[] { "DragonQuest8_like" });
+    }
 }
