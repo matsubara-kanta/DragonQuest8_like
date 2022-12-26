@@ -70,6 +70,7 @@ void UBattle_First_Widget::NativeConstruct() {
 		Tatakau_Button->OnClicked.AddDynamic(this, &UBattle_First_Widget::Invisible_Clicked);
 	}
 
+
 	Button = Cast<UButton>(GetWidgetFromName("Nigeru_Button"));
 	ensure(Button != nullptr);
 	if (Button != nullptr) {
@@ -172,4 +173,9 @@ void UBattle_First_Widget::Invisible_Clicked()
 	int32 index = Battle_Switcher->GetActiveWidgetIndex();
 	UE_LOG(LogTemp, Warning, TEXT("index: %d,%d"),index,Battle_Switcher->GetNumWidgets());
 	Battle_Switcher->SetActiveWidgetIndex(index + 1);
+}
+
+void UBattle_First_Widget::Mouse_Hovered()
+{
+	
 }

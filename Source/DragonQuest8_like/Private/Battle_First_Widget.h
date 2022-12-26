@@ -30,8 +30,10 @@ protected:
 	virtual void NativeOnInitialized() override;
 	UFUNCTION(BlueprintCallable, Category = "Test")
 		void TestClicked() { UE_LOG(LogTemp, Log, TEXT("Clicked")); }
-	UFUNCTION(BlueprintCallable, Category = "Property")
+	UFUNCTION(BlueprintCallable, Category = "Myfunc")
 		void Invisible_Clicked();
+	UFUNCTION(BlueprintCallable, Category = "Myfunc")
+		void Mouse_Hovered();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
 		TSubclassOf<UUserWidget> WBP_Battle_Command;
 
