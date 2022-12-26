@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Enemy.h"
-#include "BattleWidget.h"
+#include "Battle_First_Widget.h"
 #include "BattleActor.generated.h"
 
 #define DURATION 2.0f
@@ -24,8 +24,8 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
-	TSubclassOf<UUserWidget> WBP_Battle;
-	UBattleWidget* battle_w;
+	TSubclassOf<UUserWidget> WBP_Battle_First;
+	UBattle_First_Widget* Battle_First_w;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
