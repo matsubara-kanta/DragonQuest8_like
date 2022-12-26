@@ -35,7 +35,7 @@ void ABattleActor::SetupInput()
 }
 
 void ABattleActor::PressedSpaceBar() {
-	UGameplayStatics::OpenLevel(GetWorld(), "Field");
+	UGameplayStatics::OpenLevel(GetWorld(), "Field#PlayerStart_Battle");
 }
 
 // Called every frame
