@@ -33,5 +33,4 @@ private:
 	UTextBlock* Yangasu_Lv_Text;
 	TArray<FParty_Member> Party_Infos = { {15,21,8,10,10,10,10,10,"エイト"},
 	{20,5,9,20,20,20,20,20,"ヤンガス"} };
-	bool flag;
 };

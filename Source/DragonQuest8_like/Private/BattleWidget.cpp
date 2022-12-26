@@ -12,7 +12,6 @@ UBattleWidget::UBattleWidget(const FObjectInitializer& ObjectInitializer)
 
 void UBattleWidget::NativeConstruct() {
 	Super::NativeConstruct();
-	flag = true;
 }
 
 // Tickˆ—
@@ -25,11 +24,7 @@ void UBattleWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	if (Hero_HP_Text && Hero_MP_Text && Hero_Lv_Text) {
 		int32 Hero_HP = Party_Infos[0].HP;
 		int32 Hero_MP = Party_Infos[0].MP;
-		if (flag) {
-			UE_LOG(LogTemp, Warning, TEXT("output : %d"), Hero_HP);
-			UE_LOG(LogTemp, Warning, TEXT("output : %d"), Hero_MP);
-			flag = false;
-		}
+
 		FString Str_HP = FString::Printf(TEXT("HP : %d"), Hero_HP);
 		FString Str_MP = FString::Printf(TEXT("MP : %d"), Hero_MP);
 		Hero_HP_Text->SetText(FText::FromString(Str_HP));
@@ -47,7 +42,6 @@ void UBattleWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		Yangasu_HP_Text->SetText(FText::FromString(Str_HP));
 		Yangasu_MP_Text->SetText(FText::FromString(Str_MP));
 
-
 	}
 
 }
@@ -58,46 +52,36 @@ void UBattleWidget::NativeOnInitialized(){
 	UTextBlock*  tmp = Cast<UTextBlock>(GetWidgetFromName("Hero_HP_Text"));
 	ensure(tmp != nullptr);
 	Hero_HP_Text = tmp;
-	Hero_HP_Text->SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.f)));
 
 
 	tmp = Cast<UTextBlock>(GetWidgetFromName("Hero_MP_Text"));
 	ensure(tmp != nullptr);
 	Hero_MP_Text = tmp;
-	Hero_MP_Text->SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.f)));
 
 
 	tmp = Cast<UTextBlock>(GetWidgetFromName("Hero_Lv_Text"));
 	ensure(tmp != nullptr);
 	Hero_Lv_Text = tmp;
 	int32 Hero_Lv = Party_Infos[0].Lv;
-	UE_LOG(LogTemp, Warning, TEXT("output : %d"), Hero_Lv);
-	FString Str_Lv_H = FString::Printf(TEXT("Lv : %d"), Hero_Lv);
+	FString Str_Lv_H = FString::Printf(TEXT("Lv   : %d"), Hero_Lv);
 	Hero_Lv_Text->SetText(FText::FromString(Str_Lv_H));
-	Hero_Lv_Text->SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.f)));
-
 
 	tmp = Cast<UTextBlock>(GetWidgetFromName("Yangasu_HP_Text"));
 	ensure(tmp != nullptr);
 	Yangasu_HP_Text = tmp;
-	//Yangasu_HP_Text->SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.f)));
 
 
 	tmp = Cast<UTextBlock>(GetWidgetFromName("Yangasu_MP_Text"));
 	ensure(tmp != nullptr);
 	Yangasu_MP_Text = tmp;
-	//Yangasu_MP_Text->SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.f)));
 
 
 	tmp = Cast<UTextBlock>(GetWidgetFromName("Yangasu_Lv_Text"));
 	ensure(tmp != nullptr);
 	int32 Yangasu_Lv = Party_Infos[1].Lv;
 	Yangasu_Lv_Text = tmp;
-	FString Str_Lv = FString::Printf(TEXT("Lv : %d"), Yangasu_Lv);
+	FString Str_Lv = FString::Printf(TEXT("Lv   : %d"), Yangasu_Lv);
 	Yangasu_Lv_Text->SetText(FText::FromString(Str_Lv));
-	//Yangasu_Lv_Text->SetColorAndOpacity(FSlateColor(FLinearColor(1.f, 1.f, 1.f, 1.f)));
-	//Yangasu_HP_Text->SetRenderTransform();
-	//Yangasu_MP_Text->SetRenderTransform(FWidgetTransform::FWidgetTransform());
 
 
 }
