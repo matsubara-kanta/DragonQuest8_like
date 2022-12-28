@@ -6,10 +6,17 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/VerticalBox.h"
+#include "Components/HorizontalBox.h"
 #include "Engine.h"
 #include "Components/Border.h"
 #include "Components/TextBlock.h"
+#include "Components/HorizontalBoxSlot.h"
+#include "Components/VerticalBoxSlot.h"
+#include "Components/ButtonSlot.h"
+#include "Enemy.h"
 #include "Battle_Command_Widget.generated.h"
+
+#define FONT_SIZE 32
 
 /**
  * 
@@ -28,5 +35,13 @@ protected:
 	virtual void NativePreConstruct() override;
 	virtual void NativeDestruct() override;
 	virtual void NativeOnInitialized() override;
+
+private:
+	UVerticalBox* Enemy_VBox;
+	void Create_Enemy_UI();
+	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,10,"Corpse_Melee"},
+{20,20,20,20,20,20,20,"Corpse_Sword"},{30,30,30,30,30,30,30,"Large_Sword3"} };
+
+
 
 };

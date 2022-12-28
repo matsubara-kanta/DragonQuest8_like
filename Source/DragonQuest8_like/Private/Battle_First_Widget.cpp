@@ -4,11 +4,17 @@
 #include "Battle_First_Widget.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+
 
 UBattle_First_Widget::UBattle_First_Widget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer), Hero_HP_Text(nullptr), Hero_MP_Text(nullptr), Hero_Lv_Text(nullptr), Yangasu_HP_Text(nullptr),
-	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Command_Border(nullptr), Battle_Switcher(nullptr)
+	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Command_Border(nullptr), Battle_Switcher(nullptr),Sound_Select(nullptr)
 {
+	static ConstructorHelpers::FObjectFinder< USoundBase > find_sound(TEXT("/Script/Engine.SoundWave'/Game/DragonQuest8_like/Scenes/Battle/Select_SE.Select_SE'"));
+	if (find_sound.Succeeded()) {
+		Sound_Select = find_sound.Object;
+	}
 }
 
 void UBattle_First_Widget::NativeConstruct() {
@@ -77,7 +83,7 @@ void UBattle_First_Widget::NativeConstruct() {
 		Nigeru_Button = Button;
 	}
 	if (!Nigeru_Button->OnClicked.IsBound()) {
-		Nigeru_Button->OnClicked.AddDynamic(this, &UBattle_First_Widget::Invisible_Clicked);
+		//Nigeru_Button->OnClicked.AddDynamic(this, &UBattle_First_Widget::Invisible_Clicked);
 	}
 
 	Button = Cast<UButton>(GetWidgetFromName("Odokasu_Button"));
@@ -168,14 +174,10 @@ void UBattle_First_Widget::NativePreConstruct()
 
 void UBattle_First_Widget::Invisible_Clicked()
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), Sound_Select);
 	Command_Box->SetVisibility(ESlateVisibility::Collapsed);
 	Command_Border->SetVisibility(ESlateVisibility::Collapsed);
 	int32 index = Battle_Switcher->GetActiveWidgetIndex();
-	UE_LOG(LogTemp, Warning, TEXT("index: %d,%d"),index,Battle_Switcher->GetNumWidgets());
+	//UE_LOG(LogTemp, Warning, TEXT("index: %d,%d"),index,Battle_Switcher->GetNumWidgets());
 	Battle_Switcher->SetActiveWidgetIndex(index + 1);
-}
-
-void UBattle_First_Widget::Mouse_Hovered()
-{
-	
 }
