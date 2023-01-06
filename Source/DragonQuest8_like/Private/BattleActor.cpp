@@ -7,7 +7,7 @@
 // Sets default values
 ABattleActor::ABattleActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -23,6 +23,7 @@ void ABattleActor::BeginPlay()
 		Battle_First_w->AddToViewport();
 	}
 
+
 }
 
 void ABattleActor::SetupInput()
@@ -30,12 +31,22 @@ void ABattleActor::SetupInput()
 	EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	InputComponent->BindKey(EKeys::SpaceBar, IE_Pressed, this, &ABattleActor::PressedSpaceBar);
+	InputComponent->BindKey(EKeys::B, IE_Pressed, this, &ABattleActor::PressedB);
 	InputComponent->BindKey(EKeys::Enter, IE_Pressed, this, &ABattleActor::PressedActionPrintStructure);
 
 }
 
 void ABattleActor::PressedSpaceBar() {
 	UGameplayStatics::OpenLevel(GetWorld(), "Field#PlayerStart_Battle");
+}
+
+void ABattleActor::PressedB() {
+	UWidgetSwitcher* switcher = Battle_First_w->getSwitcher();
+	int32 index = switcher->GetActiveWidgetIndex();
+	//if (1 < index)
+		switcher->SetActiveWidgetIndex(index - 1);
+	UE_LOG(LogTemp, Warning, TEXT("PressedB"));
+
 }
 
 // Called every frame

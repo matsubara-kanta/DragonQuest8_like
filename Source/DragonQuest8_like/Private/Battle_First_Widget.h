@@ -22,6 +22,7 @@ class UBattle_First_Widget : public UUserWidget
 
 public:
 	UBattle_First_Widget(const FObjectInitializer& ObjectInitializer);
+	UWidgetSwitcher* getSwitcher();
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	virtual void NativeConstruct() override;
@@ -49,7 +50,6 @@ private:
 	UVerticalBox* Command_Box;
 	UCanvas* Command_Canvas;
 	UBorder* Command_Border;
-	UBattle_Command_Widget* Battle_Command_w;
 	UWidgetSwitcher* Battle_Switcher;
 	USoundBase* Sound_Select;
 

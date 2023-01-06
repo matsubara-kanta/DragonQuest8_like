@@ -25,6 +25,7 @@ void UBattle_Command_Widget::NativeConstruct() {
 
 
 	Create_Enemy_UI();
+
 }
 
 

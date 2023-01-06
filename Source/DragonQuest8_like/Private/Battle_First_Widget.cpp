@@ -122,6 +122,7 @@ void UBattle_First_Widget::NativeConstruct() {
 		Battle_Switcher = Switcher;
 	}
 
+	
 
 }
 
@@ -175,9 +176,12 @@ void UBattle_First_Widget::NativePreConstruct()
 void UBattle_First_Widget::Invisible_Clicked()
 {
 	UGameplayStatics::PlaySound2D(GetWorld(), Sound_Select);
-	Command_Box->SetVisibility(ESlateVisibility::Collapsed);
-	Command_Border->SetVisibility(ESlateVisibility::Collapsed);
 	int32 index = Battle_Switcher->GetActiveWidgetIndex();
 	//UE_LOG(LogTemp, Warning, TEXT("index: %d,%d"),index,Battle_Switcher->GetNumWidgets());
 	Battle_Switcher->SetActiveWidgetIndex(index + 1);
+}
+
+UWidgetSwitcher* UBattle_First_Widget::getSwitcher()
+{
+	return Battle_Switcher;
 }

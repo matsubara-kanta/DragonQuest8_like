@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Enemy.h"
 #include "Battle_First_Widget.h"
+#include <Components/WidgetSwitcher.h>
 #include "BattleActor.generated.h"
 
 #define DURATION 2.0f
@@ -33,6 +34,7 @@ protected:
 private:
 	void SetupInput();
 	void PressedSpaceBar();
+	void PressedB();
 	void PrintStructure(const FEnemy& enemy);
 	void PressedActionPrintStructure();
 	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,10,"Corpse_Melee"},
