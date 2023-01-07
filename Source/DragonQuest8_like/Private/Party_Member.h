@@ -19,6 +19,7 @@ struct FParty_Member
 	int32 M_Attack;
 	int32 M_Defense;
 	int32 Speed;
-
+	int32 ID;
 	FString Name;
+	bool alive;
 };

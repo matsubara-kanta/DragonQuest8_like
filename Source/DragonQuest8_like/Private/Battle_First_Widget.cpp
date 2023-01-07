@@ -5,16 +5,23 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include <Battle_State.h>
 
 
 UBattle_First_Widget::UBattle_First_Widget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer), Hero_HP_Text(nullptr), Hero_MP_Text(nullptr), Hero_Lv_Text(nullptr), Yangasu_HP_Text(nullptr),
-	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Command_Border(nullptr), Battle_Switcher(nullptr),Sound_Select(nullptr)
+	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Command_Border(nullptr), Battle_Switcher(nullptr), Sound_Select(nullptr)
 {
 	static ConstructorHelpers::FObjectFinder< USoundBase > find_sound(TEXT("/Script/Engine.SoundWave'/Game/DragonQuest8_like/Scenes/Battle/Select_SE.Select_SE'"));
 	if (find_sound.Succeeded()) {
 		Sound_Select = find_sound.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder< USoundBase > find_sound2(TEXT("/Script/Engine.SoundWave'/Game/DragonQuest8_like/Scenes/Battle/Nigeru_SE.Nigeru_SE'"));
+	if (find_sound2.Succeeded()) {
+		Sound_Nigeru = find_sound2.Object;
+	}
+
 }
 
 void UBattle_First_Widget::NativeConstruct() {
@@ -83,7 +90,7 @@ void UBattle_First_Widget::NativeConstruct() {
 		Nigeru_Button = Button;
 	}
 	if (!Nigeru_Button->OnClicked.IsBound()) {
-		//Nigeru_Button->OnClicked.AddDynamic(this, &UBattle_First_Widget::Invisible_Clicked);
+		Nigeru_Button->OnClicked.AddDynamic(this, &UBattle_First_Widget::Change_State);
 	}
 
 	Button = Cast<UButton>(GetWidgetFromName("Odokasu_Button"));
@@ -122,7 +129,7 @@ void UBattle_First_Widget::NativeConstruct() {
 		Battle_Switcher = Switcher;
 	}
 
-	
+
 
 }
 
@@ -184,4 +191,35 @@ void UBattle_First_Widget::Invisible_Clicked()
 UWidgetSwitcher* UBattle_First_Widget::getSwitcher()
 {
 	return Battle_Switcher;
+}
+
+void UBattle_First_Widget::Change_State()
+{
+	state = Battle_State::Escape;
+	bool flag; // “¦‚°‚ç‚ê‚é‚©‚Ç‚¤‚©
+	int random = FMath::RandRange(0, 9);
+	if (random % 3 != 0) {
+		flag = true;
+	}
+	else 
+	{
+		flag = false;
+	}
+
+	UGameplayStatics::PlaySound2D(GetWorld(), Sound_Select);
+
+	if (flag) {
+		FLatentActionInfo LatentInfo;
+		UGameplayStatics::LoadStreamLevel(GetWorld(), "Field", false, false, LatentInfo);
+		UGameplayStatics::PlaySound2D(GetWorld(), Sound_Nigeru);
+		TFunction<void(void)> Func = [this]() {
+			UGameplayStatics::OpenLevel(GetWorld(), "Field", true);
+		};
+		FTimerHandle Handle;
+		FTimerManager& timerManager = GetWorld()->GetTimerManager();
+		GetWorld()->GetTimerManager().SetTimer(Handle, (TFunction<void(void)>&&)Func, 3.0f, false);
+	}
+	else {
+		state = Battle_State::Command_Wait;
+	}
 }

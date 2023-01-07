@@ -39,8 +39,8 @@ protected:
 private:
 	UVerticalBox* Enemy_VBox;
 	void Create_Enemy_UI();
-	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,10,"Corpse_Melee"},
-{20,20,20,20,20,20,20,"Corpse_Sword"},{30,30,30,30,30,30,30,"Large_Sword3"} };
+	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,10,1,"Corpse_Melee",true},
+{20,20,20,20,20,20,20,2,"Corpse_Sword"},{30,30,30,30,30,30,30,3,"Large_Sword3",true} };
 
 
 

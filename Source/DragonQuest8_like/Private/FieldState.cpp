@@ -33,6 +33,8 @@ void AFieldState::Tick(float DeltaTime)
 		UKismetSystemLibrary::PrintString(this, "INTERVAL", true, true, FColor::Cyan, 2.f, TEXT("None"));
 		int random = FMath::RandRange(MINRANGE, MAXRANGE);
 		if (random % 7 == 0) {
+			FLatentActionInfo LatentInfo;
+			UGameplayStatics::LoadStreamLevel(GetWorld(), "Battle", false, false, LatentInfo);
 			UGameplayStatics::OpenLevel(GetWorld(), "Battle");
 		}
 		count = 0;

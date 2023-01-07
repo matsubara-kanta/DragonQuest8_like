@@ -33,6 +33,9 @@ protected:
 		void TestClicked() { UE_LOG(LogTemp, Log, TEXT("Clicked")); }
 	UFUNCTION(BlueprintCallable, Category = "Myfunc")
 		void Invisible_Clicked();
+	UFUNCTION(BlueprintCallable, Category = "Myfunc")
+		void Change_State();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
 		TSubclassOf<UUserWidget> WBP_Battle_Command;
 
@@ -52,7 +55,8 @@ private:
 	UBorder* Command_Border;
 	UWidgetSwitcher* Battle_Switcher;
 	USoundBase* Sound_Select;
+	USoundBase* Sound_Nigeru;
 
-	TArray<FParty_Member> Party_Infos = { {15,21,8,10,10,10,10,10,"エイト"},
-	{20,5,9,20,20,20,20,20,"ヤンガス"} };
+	TArray<FParty_Member> Party_Infos = { {15,21,8,10,10,10,10,10,0,"エイト",true},
+	{20,5,9,20,20,20,20,20,1,"ヤンガス",true} };
 };

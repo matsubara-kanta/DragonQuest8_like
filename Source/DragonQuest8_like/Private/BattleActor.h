@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Enemy.h"
 #include "Battle_First_Widget.h"
+#include <Battle_State.h>
 #include <Components/WidgetSwitcher.h>
 #include "BattleActor.generated.h"
 
@@ -22,10 +23,9 @@ public:
 	ABattleActor();
 	virtual void Tick(float DeltaTime) override;
 
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG_Game")
-	TSubclassOf<UUserWidget> WBP_Battle_First;
+		TSubclassOf<UUserWidget> WBP_Battle_First;
 	UBattle_First_Widget* Battle_First_w;
 
 	// Called when the game starts or when spawned
@@ -37,7 +37,11 @@ private:
 	void PressedB();
 	void PrintStructure(const FEnemy& enemy);
 	void PressedActionPrintStructure();
-	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,10,"Corpse_Melee"},
-	{20,20,20,20,20,20,20,"Corpse_Sword"},{30,30,30,30,30,30,30,"Large_Sword3"} };
+	void Command_Wait();
+	void Attack();
+	void Escape();
+
+	TArray<FEnemy> Enemy_Infos = { {10,10,10,10,10,10,10,1,"Corpse_Melee",true},
+	{20,20,20,20,20,20,20,2,"Corpse_Sword",true},{30,30,30,30,30,30,30,3,"Large_Sword3",true} };
 
 };
