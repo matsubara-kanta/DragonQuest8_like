@@ -49,6 +49,7 @@ void UBattle_Command_Widget::NativeConstruct() {
 
 	Enemy_Infos_Init();
 	Create_Enemy_UI();
+	SpawnEnemy();
 
 	UCanvasPanel* panel1 = Cast<UCanvasPanel>(GetWidgetFromName("Enemy_Panel"));
 	ensure(panel1 != nullptr);
@@ -110,6 +111,7 @@ void UBattle_Command_Widget::Create_Enemy_UI()
 
 	for (int32 Index = 0; Index < enemy_num; ++Index)
 	{
+		int32 spawn_enemy = FMath::RandRange(0, ENEMY_NUM_MAX-1);
 		if (enemy_texts[Index] != nullptr)
 		{
 			FSlateColor Color = FLinearColor::White;
@@ -117,7 +119,7 @@ void UBattle_Command_Widget::Create_Enemy_UI()
 			FSlateFontInfo TextInfo = enemy_texts[Index]->GetFont();
 			TextInfo.Size = FONT_SIZE;
 			enemy_texts[Index]->SetFont(TextInfo);
-			enemy_texts[Index]->SetText(FText::FromString(Enemy_Infos[Index].Name));
+			enemy_texts[Index]->SetText(FText::FromString(Enemy_Infos[spawn_enemy].Name));
 		}
 
 	}
@@ -126,7 +128,7 @@ void UBattle_Command_Widget::Create_Enemy_UI()
 void UBattle_Command_Widget::Enemy_Infos_Init()
 {
 	Enemy_Infos = { {10,10,10,10,10,10,10,1,"Corpse_Melee",true},
-{20,20,20,20,20,20,20,2,"Corpse_Sword",true},{30,30,30,30,30,30,30,3,"Large_Sword3",true},{10,10,10,10,10,10,10,4,"Charger",true} };
+{20,20,20,20,20,20,20,2,"Corpse_Sword",true},{30,30,30,30,30,30,30,3,"Large_Sword3",true},{10,10,10,10,10,10,10,4,"Charger",true},{20,20,10,10,10,10,10,5,"Corpse_Spear",true},{30,30,30,30,30,30,30,6,"Hooker",true} };
 }
 
 void UBattle_Command_Widget::Pressed_kougeki()
@@ -157,4 +159,26 @@ void UBattle_Command_Widget::backCommand()
 	disable_spacer->SetVisibility(ESlateVisibility::Hidden);
 	enemy_canvas->SetVisibility(ESlateVisibility::Hidden);
 	party_canvas->SetRenderOpacity(1.0f);
+}
+
+void UBattle_Command_Widget::SpawnEnemy()
+{
+	FVector pos = FVector(600, -400, 20);
+	FRotator rotate = FRotator(0, -180, 0);
+	for (int32 index = 0; index < enemy_num; ++index)
+	{
+		FString str = enemy_texts[index]->GetText().ToString() + "_BP";
+		FString name = str + "." + str + "_C'";
+		FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Battle/Enemy/" + name;
+		TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
+		if (sc != nullptr)
+		{
+			AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
+			FVector p = pos + FVector(0, 200 * index, 0);
+			a->SetActorLocation(p);
+			a->SetActorRotation(rotate);
+		}
+
+	}
+
 }

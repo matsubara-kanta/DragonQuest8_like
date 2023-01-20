@@ -18,7 +18,7 @@
 #include "Components/CanvasPanel.h"
 #include "Battle_Command_Widget.generated.h"
 
-#define ENEMY_NUM_MAX 4
+#define ENEMY_NUM_MAX 5
 #define FONT_SIZE 32
 
 
@@ -50,6 +50,7 @@ protected:
 private:
 	void Create_Enemy_UI();
 	void Enemy_Infos_Init();
+	void SpawnEnemy();
 	UButton* kougeki_button;
 	TArray<FEnemy> Enemy_Infos;
 	TArray<UButton*> enemy_buttons;
