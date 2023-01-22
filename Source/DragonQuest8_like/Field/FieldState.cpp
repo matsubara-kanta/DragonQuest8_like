@@ -5,6 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "HAL/PlatformProcess.h"
+#include "GameFramework/Character.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 
@@ -126,7 +127,7 @@ void AFieldState::Spawn_Enemy()
 	{
 		FString str = enemy_infos[index].NAME.ToString() + "_BP";
 		FString name = str + "." + str + "_C'";
-		FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Battle/Enemy/" + name;
+		FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Field/Enemy/" + name;
 		TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
 		if (sc != nullptr)
 		{
@@ -141,7 +142,7 @@ void AFieldState::Spawn_Enemy()
 				y = FMath::RandRange(-600, 600);
 
 			a->SetActorLocation(pos + FVector(x, y, 0));
-			a->SetActorLabel(FString::FromInt(enemy_infos[index].ID));
+			//a->SetActorLabel(FString::FromInt(enemy_infos[index].ID));
 		}
 	}
 }

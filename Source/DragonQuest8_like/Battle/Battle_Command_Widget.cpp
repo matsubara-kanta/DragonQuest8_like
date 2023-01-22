@@ -191,7 +191,6 @@ void UBattle_Command_Widget::SpawnEnemy()
 	FVector prev = pos;
 	FRotator rotate = FRotator(0, -180, 0);
 	int32 count = 1;
-
 	if (enemy_num % 2 != 0) // 敵の数が奇数の時
 	{
 		int32 ratio = 0;
@@ -207,6 +206,7 @@ void UBattle_Command_Widget::SpawnEnemy()
 			TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
 			if (sc != nullptr)
 			{
+
 				AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
 				FVector p;
 				if (index % 2 != 0) // 右側に配置
