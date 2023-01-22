@@ -107,11 +107,8 @@ void UBattle_Command_Widget::NativePreConstruct()
 void UBattle_Command_Widget::Create_Enemy_UI()
 {
 
-	enemy_num = FMath::RandRange(1, ENEMY_NUM_MAX);
-
 	for (int32 Index = 0; Index < enemy_num; ++Index)
 	{
-		int32 spawn_enemy = FMath::RandRange(0, ENEMY_NUM_MAX-1);
 		if (enemy_texts[Index] != nullptr)
 		{
 			FSlateColor Color = FLinearColor::White;
@@ -119,16 +116,42 @@ void UBattle_Command_Widget::Create_Enemy_UI()
 			FSlateFontInfo TextInfo = enemy_texts[Index]->GetFont();
 			TextInfo.Size = FONT_SIZE;
 			enemy_texts[Index]->SetFont(TextInfo);
-			enemy_texts[Index]->SetText(FText::FromString(Enemy_Infos[spawn_enemy].Name));
+			enemy_texts[Index]->SetText(Enemy_Infos[Index].NAME);
 		}
 
 	}
 }
 
+void UBattle_Command_Widget::Load_Enemy()
+{
+	FSoftObjectPath EnemyDataAssetPath = "/Script/DragonQuest8_like.EnemyDataAsset'/Game/DragonQuest8_like/Scenes/Field/EnemyDataAsset.EnemyDataAsset'";
+
+	if (enemy_asset == nullptr)
+	{
+		enemy_asset = Cast<UEnemyDataAsset>(StaticLoadObject(UEnemyDataAsset::StaticClass(), nullptr, *EnemyDataAssetPath.ToString()));
+		ensure(enemy_asset != nullptr);
+	}
+	return;
+}
+
 void UBattle_Command_Widget::Enemy_Infos_Init()
 {
-	Enemy_Infos = { {10,10,10,10,10,10,10,1,"Corpse_Melee",true},
-{20,20,20,20,20,20,20,2,"Corpse_Sword",true},{30,30,30,30,30,30,30,3,"Large_Sword3",true},{10,10,10,10,10,10,10,4,"Charger",true},{20,20,10,10,10,10,10,5,"Corpse_Spear",true},{30,30,30,30,30,30,30,6,"Hooker",true} };
+	Load_Enemy();
+	enemy_num = FMath::RandRange(1, ENEMY_NUM_MAX);
+
+	if (enemy_asset != nullptr)
+	{
+		UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
+		if (instance)
+		{
+			Enemy_Infos.Add(enemy_asset->Data[instance->enemy_id]);
+		}
+		
+		for (int32 index = 0; index < enemy_num-1; index++)
+		{
+			Enemy_Infos.Add(enemy_asset->Data[FMath::RandRange(0, ENEMY_NUM_MAX - 1)]); // ランダムスポーン
+		}
+	}
 }
 
 void UBattle_Command_Widget::Pressed_kougeki()
@@ -143,6 +166,7 @@ void UBattle_Command_Widget::Pressed_kougeki()
 	}
 
 	disable_spacer->SetVisibility(ESlateVisibility::Visible);
+	setkougekiButton(false);
 	party_canvas->SetRenderOpacity(0.4f);
 }
 
@@ -163,22 +187,88 @@ void UBattle_Command_Widget::backCommand()
 
 void UBattle_Command_Widget::SpawnEnemy()
 {
-	FVector pos = FVector(600, -400, 20);
+	FVector pos = FVector(600, 0, 20);
+	FVector prev = pos;
 	FRotator rotate = FRotator(0, -180, 0);
-	for (int32 index = 0; index < enemy_num; ++index)
+	int32 count = 1;
+
+	if (enemy_num % 2 != 0) // 敵の数が奇数の時
 	{
-		FString str = enemy_texts[index]->GetText().ToString() + "_BP";
-		FString name = str + "." + str + "_C'";
-		FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Battle/Enemy/" + name;
-		TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
-		if (sc != nullptr)
+		int32 ratio = 0;
+
+		if (1 < enemy_num)
+			ratio = MAX_POS_R / ((enemy_num - 1) / 2);
+
+		for (int32 index = 0; index < enemy_num; ++index)
 		{
-			AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
-			FVector p = pos + FVector(0, 200 * index, 0);
-			a->SetActorLocation(p);
-			a->SetActorRotation(rotate);
+			FString str = Enemy_Infos[index].NAME.ToString() + "_BP";
+			FString name = str + "." + str + "_C'";
+			FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Battle/Enemy/" + name;
+			TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
+			if (sc != nullptr)
+			{
+				AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
+				FVector p;
+				if (index % 2 != 0) // 右側に配置
+				{
+					p = pos + FVector(0, ratio * count, 0);
+					prev = p;
+					count++;
+				}
+				else // 左側に配置
+				{
+					p = FVector(prev.X, -prev.Y, prev.Z);
+				}
+				//UKismetSystemLibrary::PrintString(this, "(" + FString::FromInt(p.X) + ", " + FString::FromInt(p.Y) + ", " + FString::FromInt(p.Z) + ")", true, true, FColor::Cyan, 10.f, TEXT("None"));
+				a->SetActorLocation(p);
+				a->SetActorRotation(rotate);
+			}
+
+		}
+	}
+	else // 敵の数が偶数の時
+	{
+		int32 ratio = MAX_POS_R / enemy_num;
+		for (int32 index = 0; index < enemy_num; ++index)
+		{
+			FString str = enemy_texts[index]->GetText().ToString() + "_BP";
+			FString name = str + "." + str + "_C'";
+			FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Battle/Enemy/" + name;
+			TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
+			if (sc != nullptr)
+			{
+				AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
+				FVector p;
+
+				if (index % 2 != 0) // 左側に配置
+				{
+					p = FVector(prev.X, -prev.Y, prev.Z);
+				}
+				else // 右側に配置
+				{
+					p = prev + FVector(0, ratio * count, 0);
+					prev = p;
+					count++;
+				}
+
+				a->SetActorLocation(p);
+				a->SetActorRotation(rotate);
+			}
+
 		}
 
 	}
 
+}
+
+void UBattle_Command_Widget::decrease_enemy_hp(int32 hp)
+{
+	UKismetSystemLibrary::PrintString(this, "before: " + FString::FromInt(Enemy_Infos[0].HP), true, true, FColor::Cyan, 50.f, TEXT("None"));
+	Enemy_Infos[0].HP -= hp;
+	UKismetSystemLibrary::PrintString(this, "after: " + FString::FromInt(Enemy_Infos[0].HP), true, true, FColor::Cyan, 50.f, TEXT("None"));
+}
+
+void UBattle_Command_Widget::setkougekiButton(bool b)
+{
+	kougeki_button->SetIsEnabled(b);
 }

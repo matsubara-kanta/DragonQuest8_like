@@ -11,7 +11,7 @@
 #include "Components/Border.h"
 #include "Battle_Command_Widget.h"
 #include "Components/WidgetSwitcher.h"
-#include "BattleCharacter.h"
+#include "../Field/PlayerDataAsset.h"
 #include "Battle_First_Widget.generated.h"
 
 #define INDEX_HP 0
@@ -26,8 +26,9 @@ class UBattle_First_Widget : public UUserWidget
 public:
 	UBattle_First_Widget(const FObjectInitializer& ObjectInitializer);
 	UWidgetSwitcher* getSwitcher();
-	void Init(TArray<BattleCharacter*> Party_Infos);
-	void Update(TArray<BattleCharacter*> Party_Infos);
+	void Init(TArray<FPlayerDataAssetRecord> player_infos);
+	void Update(TArray<FPlayerDataAssetRecord> player_infos);
+	void setNigeruButton(bool b);
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;

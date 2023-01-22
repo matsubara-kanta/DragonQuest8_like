@@ -6,12 +6,12 @@
 #include "GameFramework/GameModeBase.h"
 #include "Battle_First_Widget.h"
 #include "Battle_State.h"
-#include "BattleCharacter.h"
 #include "Components/Spacer.h"
 #include "Components/CanvasPanel.h"
 #include "Components/WidgetSwitcher.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Battle_Command_Widget.h"
+#include "../Field/PlayerDataAsset.h"
 #include "BattleGameModeBase.generated.h"
 
 
@@ -44,6 +44,7 @@ private:
 	void Command_Wait();
 	void Attack();
 	void Escape();
-	TArray<BattleCharacter*> Party_Infos;
+	TArray<FPlayerDataAssetRecord> player_infos;
 	UWidgetSwitcher* switcher;
+
 };

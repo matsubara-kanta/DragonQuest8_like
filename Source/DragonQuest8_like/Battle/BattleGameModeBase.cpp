@@ -2,6 +2,7 @@
 
 
 #include "BattleGameModeBase.h"
+#include "../DQ8GameInstance.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 Battle_State state = Battle_State::Command_Wait;
@@ -16,10 +17,7 @@ ABattleGameModeBase::ABattleGameModeBase()
 
 ABattleGameModeBase::~ABattleGameModeBase()
 {
-	for (auto& info : Party_Infos)
-	{
-		delete info;
-	}
+
 }
 
 // Called when the game starts or when spawned
@@ -63,14 +61,12 @@ void ABattleGameModeBase::BeginPlay()
 		switcher->AddChild(battle_command_w);
 	}
 
-
-
-	// ここはゲームを始めた段階でステータスを初期化、それ以降はステータスを保存しておいてそれを使うように
-	// forループ回して値を初期化したい
-	Party_Infos.Add(new BattleCharacter(15, 21, 8, 10, 10, 10, 10, BattleCharacter::Chara_State::ALIVE, 0, "エイト"));
-	Party_Infos.Add(new BattleCharacter(20, 5, 9, 20, 20, 20, 20, BattleCharacter::Chara_State::ALIVE, 1, "ヤンガス"));
-
-	Battle_First_w->Init(Party_Infos);
+	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
+	ensure(instance != nullptr);
+	if (instance)
+	{
+		Battle_First_w->Init(instance->player_infos);
+	}
 }
 
 // Called every frame
@@ -81,6 +77,7 @@ void ABattleGameModeBase::Tick(float DeltaTime)
 	switch (state)
 	{
 	case Battle_State::Command_Wait:
+		Command_Wait();
 		break;
 	case Battle_State::Attack:
 		state = Battle_State::Command_Wait;
@@ -108,14 +105,14 @@ void ABattleGameModeBase::PressedB()
 		}
 	}
 	UE_LOG(LogTemp, Warning, TEXT("PressedB"));
-
+	battle_command_w->setkougekiButton(true);
 }
 
 void ABattleGameModeBase::PressedD()
 {
-	for (int32 index = 0; index != Party_Infos.Num(); ++index)
+	for (int32 index = 0; index != player_infos.Num(); ++index)
 	{
-		UKismetSystemLibrary::PrintString(this, Party_Infos[index]->printAll(), true, true, FColor::Cyan, 10.f, TEXT("None"));
+		UKismetSystemLibrary::PrintString(this, "HP:	 " + FString::FromInt(player_infos[index].HP) + "            MP:  " + FString::FromInt(player_infos[index].MP) + "            Lv:  " + FString::FromInt(player_infos[index].Lv) + "           ATK:  " + FString::FromInt(player_infos[index].ATK) + "         DEF:  " + FString::FromInt(player_infos[index].DEF) + "           INT:  " + FString::FromInt(player_infos[index].INT) + "         SPD:  " + FString::FromInt(player_infos[index].SPD) + "         STATE:  " + FString::FromInt(player_infos[index].STATE) + "           ID:  " + FString::FromInt(player_infos[index].ID) + "          NAME:  " + player_infos[index].NAME.ToString(), true, true, FColor::Cyan, 10.f, TEXT("None"));
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("PressedD"));
@@ -123,6 +120,8 @@ void ABattleGameModeBase::PressedD()
 
 void ABattleGameModeBase::SetupInput()
 {
+	//FInputModeGameAndUI InputMode;
+	//UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputMode);
 	EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	InputComponent->BindKey(EKeys::B, IE_Pressed, this, &ABattleGameModeBase::PressedB);
 	InputComponent->BindKey(EKeys::D, IE_Pressed, this, &ABattleGameModeBase::PressedD);
@@ -135,11 +134,12 @@ void ABattleGameModeBase::Command_Wait()
 	//EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	// コマンドがいくつ入力されたか取得
 	//state = Battle_State::Attack;
+	Battle_First_w->setNigeruButton(true);
 }
 
 void ABattleGameModeBase::Attack()
 {
-	Battle_First_w->Update(Party_Infos);
+	Battle_First_w->Update(player_infos);
 }
 
 void ABattleGameModeBase::Escape()

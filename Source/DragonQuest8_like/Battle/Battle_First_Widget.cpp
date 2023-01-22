@@ -4,7 +4,9 @@
 #include "Battle_First_Widget.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "../Field/PlayerDataAsset.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "../DQ8GameInstance.h"
 #include "Battle_State.h"
 
 
@@ -134,7 +136,6 @@ void UBattle_First_Widget::NativeConstruct() {
 
 	Text.Add(Hero_Text);
 	Text.Add(Yangasu_Text);
-
 }
 
 // Tickèàóù
@@ -159,13 +160,16 @@ void UBattle_First_Widget::NativePreConstruct()
 	Super::NativePreConstruct();
 }
 
-void UBattle_First_Widget::Init(TArray<BattleCharacter*> Party_Infos)
+void UBattle_First_Widget::Init(TArray<FPlayerDataAssetRecord> player_infos)
 {
-	for (int32 Index = 0; Index != Party_Infos.Num(); ++Index)
+	//UKismetSystemLibrary::PrintString(this, FString::FromInt(player_infos.Num()), true, true, FColor::Cyan, 50.f, TEXT("None"));
+	//UE_LOG(LogTemp, Warning, TEXT("num: %d"), player_infos.Num());
+
+	for (int32 Index = 0; Index != player_infos.Num(); ++Index)
 	{
-		int32 HP = Party_Infos[Index]->getHP();
-		int32 MP = Party_Infos[Index]->getMP();
-		int32 Lv = Party_Infos[Index]->getLv();
+		int32 HP = player_infos[Index].HP;
+		int32 MP = player_infos[Index].MP;
+		int32 Lv = player_infos[Index].Lv;
 		FString Str_HP = FString::Printf(TEXT("HP : %d"), HP);
 		FString Str_MP = FString::Printf(TEXT("MP : %d"), MP);
 		FString Str_Lv = FString::Printf(TEXT("Lv   : %d"), Lv);
@@ -176,12 +180,12 @@ void UBattle_First_Widget::Init(TArray<BattleCharacter*> Party_Infos)
 
 }
 
-void UBattle_First_Widget::Update(TArray<BattleCharacter*> Party_Infos)
+void UBattle_First_Widget::Update(TArray<FPlayerDataAssetRecord> player_infos)
 {
-	for (int32 Index = 0; Index != Party_Infos.Num(); ++Index)
+	for (int32 Index = 0; Index < player_infos.Num(); Index++)
 	{
-		int32 HP = Party_Infos[Index]->getHP();
-		int32 MP = Party_Infos[Index]->getMP();
+		int32 HP = player_infos[Index].HP;
+		int32 MP = player_infos[Index].MP;
 		FString Str_HP = FString::Printf(TEXT("HP : %d"), HP);
 		FString Str_MP = FString::Printf(TEXT("MP : %d"), MP);
 		Text[Index][INDEX_HP]->SetText(FText::FromString(Str_HP));
@@ -205,6 +209,7 @@ UWidgetSwitcher* UBattle_First_Widget::getSwitcher()
 
 void UBattle_First_Widget::Change_State()
 {
+	Nigeru_Button->SetIsEnabled(false);
 	state = Battle_State::Escape;
 	bool flag; // ì¶Ç∞ÇÁÇÍÇÈÇ©Ç«Ç§Ç©
 	int random = FMath::RandRange(0, 9);
@@ -220,7 +225,7 @@ void UBattle_First_Widget::Change_State()
 
 	if (flag) {
 		FLatentActionInfo LatentInfo;
-		UGameplayStatics::LoadStreamLevel(GetWorld(), "Field", false, false, LatentInfo);
+		//UGameplayStatics::LoadStreamLevel(GetWorld(), "Field", false, false, LatentInfo);
 		UGameplayStatics::PlaySound2D(GetWorld(), Sound_Nigeru);
 		TFunction<void(void)> Func = [this]() {
 			UGameplayStatics::OpenLevel(GetWorld(), "Field", true);
@@ -232,4 +237,9 @@ void UBattle_First_Widget::Change_State()
 	else {
 		state = Battle_State::Command_Wait;
 	}
+}
+
+void UBattle_First_Widget::setNigeruButton(bool b)
+{
+	Nigeru_Button->SetIsEnabled(b);
 }
