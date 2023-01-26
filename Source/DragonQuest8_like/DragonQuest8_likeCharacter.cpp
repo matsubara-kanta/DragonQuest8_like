@@ -124,6 +124,22 @@ void ADragonQuest8_likeCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void ADragonQuest8_likeCharacter::setRecord(FPlayerDataAssetRecord record)
+{
+	player_record.ATK = record.ATK;
+	player_record.DEF = record.DEF;
+	player_record.HP = record.HP;
+	player_record.ID = record.ID;
+	player_record.INT = record.INT;
+	player_record.Lv = record.Lv;
+	player_record.MP = record.MP;
+	player_record.NAME = record.NAME;
+	player_record.SPD = record.SPD;
+	player_record.STATE = record.STATE;
+	player_record.EXP = record.EXP;
+	player_record.NEXTLv_EXP = record.NEXTLv_EXP;
+}
+
 
 
 

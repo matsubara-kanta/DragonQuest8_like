@@ -8,7 +8,7 @@
 #include "PlayerDataAsset.generated.h"
 
 /**
- * 
+ *
  */
 
 USTRUCT()
@@ -35,6 +35,11 @@ public:
 		int32 STATE; // キャラの状態
 	UPROPERTY(EditAnywhere)
 		int32 ID;
+	UPROPERTY(EditAnywhere)
+		int32 EXP;
+	UPROPERTY(EditAnywhere)
+		int32 NEXTLv_EXP; // レベルアップするのに必要な経験値
+
 };
 
 
@@ -62,6 +67,10 @@ public:
 		int32 STATE; // キャラの状態
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int32 ID;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int32 EXP;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 NEXTLv_EXP;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FText NAME;
 };

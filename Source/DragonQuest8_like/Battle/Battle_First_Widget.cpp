@@ -4,7 +4,7 @@
 #include "Battle_First_Widget.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "../Field/PlayerDataAsset.h"
+#include "../PlayerDataAsset.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "../DQ8GameInstance.h"
 #include "Battle_State.h"
@@ -12,7 +12,7 @@
 
 UBattle_First_Widget::UBattle_First_Widget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer), Hero_HP_Text(nullptr), Hero_MP_Text(nullptr), Hero_Lv_Text(nullptr), Yangasu_HP_Text(nullptr),
-	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Command_Border(nullptr), Battle_Switcher(nullptr), Sound_Select(nullptr)
+	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Battle_Switcher(nullptr), Sound_Select(nullptr)
 {
 	static ConstructorHelpers::FObjectFinder< USoundBase > find_sound(TEXT("/Script/Engine.SoundWave'/Game/DragonQuest8_like/Scenes/Battle/Select_SE.Select_SE'"));
 	if (find_sound.Succeeded()) {
@@ -121,12 +121,6 @@ void UBattle_First_Widget::NativeConstruct() {
 		Command_Box = Box;
 	}
 
-	UBorder* Border = Cast<UBorder>(GetWidgetFromName("Command_Border"));
-	ensure(Border != nullptr);
-	if (Border != nullptr) {
-		Command_Border = Border;
-	}
-
 	UWidgetSwitcher* Switcher = Cast<UWidgetSwitcher>(GetWidgetFromName("Battle_Switcher"));
 	ensure(Switcher != nullptr);
 	if (Switcher != nullptr) {
@@ -209,7 +203,7 @@ UWidgetSwitcher* UBattle_First_Widget::getSwitcher()
 
 void UBattle_First_Widget::Change_State()
 {
-	Nigeru_Button->SetIsEnabled(false);
+	setBattle_First_Widget(false);
 	state = Battle_State::Escape;
 	bool flag; // “¦‚°‚ç‚ê‚é‚©‚Ç‚¤‚©
 	int random = FMath::RandRange(0, 9);
@@ -239,7 +233,7 @@ void UBattle_First_Widget::Change_State()
 	}
 }
 
-void UBattle_First_Widget::setNigeruButton(bool b)
+void UBattle_First_Widget::setBattle_First_Widget(bool b)
 {
-	Nigeru_Button->SetIsEnabled(b);
+	this->SetIsEnabled(b);
 }

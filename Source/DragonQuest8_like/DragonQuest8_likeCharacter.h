@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "PlayerDataAsset.h"
 #include "DragonQuest8_likeCharacter.generated.h"
 
 
@@ -39,6 +40,8 @@ class ADragonQuest8_likeCharacter : public ACharacter
 
 public:
 	ADragonQuest8_likeCharacter();
+	void setRecord(FPlayerDataAssetRecord record);
+
 	
 
 protected:
@@ -62,5 +65,10 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+private:
+	FPlayerDataAssetRecord player_record;
+
+
 };
 

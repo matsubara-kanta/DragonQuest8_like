@@ -11,7 +11,8 @@
 #include "Components/WidgetSwitcher.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Battle_Command_Widget.h"
-#include "../Field/PlayerDataAsset.h"
+#include "../PlayerDataAsset.h"
+#include "../EnemyDataAsset.h"
 #include "BattleGameModeBase.generated.h"
 
 
@@ -29,9 +30,47 @@ public:
 	ABattleGameModeBase();
 	~ABattleGameModeBase();
 	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TArray<FPlayerDataAssetRecord> player_infos;
+	UPROPERTY(EditAnywhere)
+	TArray<FEnemyDataAssetRecord> enemy_infos;
+
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void setEnemyLocation();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		TArray<AEnemyCharacter*> getEnemyActors();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void addEnemyActor(AEnemyCharacter* character);
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void setBattleCommandWidget(UBattle_Command_Widget* widget);
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		UBattle_Command_Widget* getBattleCommandWidget();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void setBattleFirstWidget(UBattle_First_Widget* widget);
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		UBattle_First_Widget* getBattleFirstWidget();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void Init_Player();
+
+
+
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FVector> enemy_pos;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<AEnemyCharacter*> enemy_actors;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 enemy_num;
+
+
+
+
 
 protected:
-	UBattle_First_Widget* Battle_First_w;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UBattle_First_Widget* battle_first_w;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBattle_Command_Widget* battle_command_w;
 
 	// Called when the game starts or when spawned
@@ -40,11 +79,19 @@ protected:
 private:
 	void SetupInput();
 	void PressedB();
-	void PressedD();
 	void Command_Wait();
 	void Attack();
 	void Escape();
-	TArray<FPlayerDataAssetRecord> player_infos;
+
 	UWidgetSwitcher* switcher;
+	int32 enemy_id;
+
+	/* デバッグ用 */
+	void PressedD();
+	void PressedK();
+	int32 kill;
+
+
+
 
 };

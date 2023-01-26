@@ -8,7 +8,7 @@
 #include "EnemyDataAsset.generated.h"
 
 /**
- * 
+ *
  */
 USTRUCT()
 struct FEnemyData : public FTableRowBase
@@ -17,23 +17,28 @@ struct FEnemyData : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere)
-	int32 HP;
+		int32 HP;
 	UPROPERTY(EditAnywhere)
-	int32 MP;
+		int32 MP;
 	UPROPERTY(EditAnywhere)
-	int32 Lv;
+		int32 Lv;
 	UPROPERTY(EditAnywhere)
-	int32 ATK;
+		int32 ATK;
 	UPROPERTY(EditAnywhere)
-	int32 DEF;
+		int32 DEF;
 	UPROPERTY(EditAnywhere)
-	int32 INT;
+		int32 INT;
 	UPROPERTY(EditAnywhere)
-	int32 SPD;
+		int32 SPD;
 	UPROPERTY(EditAnywhere)
-	int32 STATE; // キャラの状態
+		int32 STATE; // キャラの状態
 	UPROPERTY(EditAnywhere)
-	int32 ID;
+		int32 ID;
+	UPROPERTY(EditAnywhere)
+		int32 EXP;
+	UPROPERTY(EditAnywhere)
+		int32 GOLD;
+
 };
 
 
@@ -44,25 +49,32 @@ struct FEnemyDataAssetRecord
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 HP;
+		int32 HP;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 MP;
+		int32 MP;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 Lv;
+		int32 Lv;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 ATK;
+		int32 ATK;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 DEF;
+		int32 DEF;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 INT;
+		int32 INT;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 SPD;
+		int32 SPD;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 STATE; // キャラの状態
+		int32 STATE; // キャラの状態
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 ID;
+		int32 ID;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText NAME;
+
+		int32 EXP;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+
+		int32 GOLD;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FText NAME;
 };
 
 UCLASS()

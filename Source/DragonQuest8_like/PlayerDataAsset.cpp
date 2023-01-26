@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "../Field/PlayerDataAsset.h"
+#include "PlayerDataAsset.h"
 
 void UPlayerDataAsset::Import()
 {
@@ -29,6 +29,8 @@ void UPlayerDataAsset::Import()
         asset.SPD = record->SPD;
         asset.STATE = record->STATE;
         asset.ID = record->ID;
+        asset.EXP = record->EXP;
+        asset.NEXTLv_EXP = record->NEXTLv_EXP;
         asset.NAME = FText::FromName(Names[i]);
         Data.Add(asset);
     }

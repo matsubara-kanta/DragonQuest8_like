@@ -29,6 +29,8 @@ void UEnemyDataAsset::Import()
         asset.SPD = record->SPD;
         asset.STATE = record->STATE;
         asset.ID = record->ID;
+        asset.EXP = record->EXP;
+        asset.GOLD = record->GOLD;
         asset.NAME = FText::FromName(Names[i]);
         Data.Add(asset);
     }

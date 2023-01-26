@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "GameFramework/Character.h"
 #include "Battle_Command_Widget.h"
+#include "../EnemyCharacter.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 
@@ -13,7 +15,6 @@ UBattle_Command_Widget::UBattle_Command_Widget(const FObjectInitializer& ObjectI
 	if (find_sound.Succeeded()) {
 		Sound_Select = find_sound.Object;
 	}
-
 }
 
 void UBattle_Command_Widget::NativeConstruct() {
@@ -21,6 +22,7 @@ void UBattle_Command_Widget::NativeConstruct() {
 	//UE_LOG(LogTemp, Warning, TEXT("Output3: %s"), *HBox_Child->GetAllChildren()[i]->GetName());
 
 	for (int32 index = 0; index < ENEMY_NUM_MAX; ++index) {
+
 		FString str1 = "Enemy_Text" + FString::FromInt(index + 1);
 		UTextBlock* tmp = Cast<UTextBlock>(GetWidgetFromName(FName(str1)));
 		ensure(tmp != nullptr);
@@ -46,10 +48,6 @@ void UBattle_Command_Widget::NativeConstruct() {
 		}
 
 	}
-
-	Enemy_Infos_Init();
-	Create_Enemy_UI();
-	SpawnEnemy();
 
 	UCanvasPanel* panel1 = Cast<UCanvasPanel>(GetWidgetFromName("Enemy_Panel"));
 	ensure(panel1 != nullptr);
@@ -79,8 +77,6 @@ void UBattle_Command_Widget::NativeConstruct() {
 	if (panel2 != nullptr) {
 		party_canvas = panel2;
 	}
-
-
 }
 
 
@@ -104,55 +100,33 @@ void UBattle_Command_Widget::NativePreConstruct()
 	Super::NativePreConstruct();
 }
 
-void UBattle_Command_Widget::Create_Enemy_UI()
-{
 
-	for (int32 Index = 0; Index < enemy_num; ++Index)
+
+void UBattle_Command_Widget::Create_Enemy_UI(TArray<AEnemyCharacter*> enemy_actors)
+{
+	if (enemy_texts.Num() != 0)
 	{
-		if (enemy_texts[Index] != nullptr)
+		UKismetSystemLibrary::PrintString(this, "passed2");
+		for (int32 index = 0; index < enemy_actors.Num(); ++index)
 		{
+			UKismetSystemLibrary::PrintString(this, "passed3");
 			FSlateColor Color = FLinearColor::White;
-			enemy_texts[Index]->SetColorAndOpacity(Color);
-			FSlateFontInfo TextInfo = enemy_texts[Index]->GetFont();
+			enemy_texts[index]->SetColorAndOpacity(Color);
+			FSlateFontInfo TextInfo = enemy_texts[index]->GetFont();
 			TextInfo.Size = FONT_SIZE;
-			enemy_texts[Index]->SetFont(TextInfo);
-			enemy_texts[Index]->SetText(Enemy_Infos[Index].NAME);
+			enemy_texts[index]->SetFont(TextInfo);
+			//UKismetSystemLibrary::PrintString(this, "enemy: " + enemy_actors[index]->getRecord().NAME.ToString());
+			enemy_texts[index]->SetText(enemy_actors[index]->getRecord().NAME);
+
+			if (!enemy_buttons[index]->OnClicked.IsBound()) {
+				enemy_buttons[index]->OnClicked.AddDynamic(this, &UBattle_Command_Widget::Enemy_Button_Clicked);
+			}
+
 		}
 
 	}
 }
 
-void UBattle_Command_Widget::Load_Enemy()
-{
-	FSoftObjectPath EnemyDataAssetPath = "/Script/DragonQuest8_like.EnemyDataAsset'/Game/DragonQuest8_like/Scenes/Field/EnemyDataAsset.EnemyDataAsset'";
-
-	if (enemy_asset == nullptr)
-	{
-		enemy_asset = Cast<UEnemyDataAsset>(StaticLoadObject(UEnemyDataAsset::StaticClass(), nullptr, *EnemyDataAssetPath.ToString()));
-		ensure(enemy_asset != nullptr);
-	}
-	return;
-}
-
-void UBattle_Command_Widget::Enemy_Infos_Init()
-{
-	Load_Enemy();
-	enemy_num = FMath::RandRange(1, ENEMY_NUM_MAX);
-
-	if (enemy_asset != nullptr)
-	{
-		UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
-		if (instance)
-		{
-			Enemy_Infos.Add(enemy_asset->Data[instance->enemy_id]);
-		}
-		
-		for (int32 index = 0; index < enemy_num-1; index++)
-		{
-			Enemy_Infos.Add(enemy_asset->Data[FMath::RandRange(0, ENEMY_NUM_MAX - 1)]); // ランダムスポーン
-		}
-	}
-}
 
 void UBattle_Command_Widget::Pressed_kougeki()
 {
@@ -185,90 +159,23 @@ void UBattle_Command_Widget::backCommand()
 	party_canvas->SetRenderOpacity(1.0f);
 }
 
-void UBattle_Command_Widget::SpawnEnemy()
-{
-	FVector pos = FVector(600, 0, 20);
-	FVector prev = pos;
-	FRotator rotate = FRotator(0, -180, 0);
-	int32 count = 1;
-	if (enemy_num % 2 != 0) // 敵の数が奇数の時
-	{
-		int32 ratio = 0;
-
-		if (1 < enemy_num)
-			ratio = MAX_POS_R / ((enemy_num - 1) / 2);
-
-		for (int32 index = 0; index < enemy_num; ++index)
-		{
-			FString str = Enemy_Infos[index].NAME.ToString() + "_BP";
-			FString name = str + "." + str + "_C'";
-			FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Battle/Enemy/" + name;
-			TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
-			if (sc != nullptr)
-			{
-
-				AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
-				FVector p;
-				if (index % 2 != 0) // 右側に配置
-				{
-					p = pos + FVector(0, ratio * count, 0);
-					prev = p;
-					count++;
-				}
-				else // 左側に配置
-				{
-					p = FVector(prev.X, -prev.Y, prev.Z);
-				}
-				//UKismetSystemLibrary::PrintString(this, "(" + FString::FromInt(p.X) + ", " + FString::FromInt(p.Y) + ", " + FString::FromInt(p.Z) + ")", true, true, FColor::Cyan, 10.f, TEXT("None"));
-				a->SetActorLocation(p);
-				a->SetActorRotation(rotate);
-			}
-
-		}
-	}
-	else // 敵の数が偶数の時
-	{
-		int32 ratio = MAX_POS_R / enemy_num;
-		for (int32 index = 0; index < enemy_num; ++index)
-		{
-			FString str = enemy_texts[index]->GetText().ToString() + "_BP";
-			FString name = str + "." + str + "_C'";
-			FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Battle/Enemy/" + name;
-			TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
-			if (sc != nullptr)
-			{
-				AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
-				FVector p;
-
-				if (index % 2 != 0) // 左側に配置
-				{
-					p = FVector(prev.X, -prev.Y, prev.Z);
-				}
-				else // 右側に配置
-				{
-					p = prev + FVector(0, ratio * count, 0);
-					prev = p;
-					count++;
-				}
-
-				a->SetActorLocation(p);
-				a->SetActorRotation(rotate);
-			}
-
-		}
-
-	}
-
-}
-
-void UBattle_Command_Widget::decrease_enemy_hp(int32 hp)
-{
-	UKismetSystemLibrary::PrintString(this, "before: " + FString::FromInt(Enemy_Infos[0].HP), true, true, FColor::Cyan, 50.f, TEXT("None"));
-	Enemy_Infos[0].HP -= hp;
-	UKismetSystemLibrary::PrintString(this, "after: " + FString::FromInt(Enemy_Infos[0].HP), true, true, FColor::Cyan, 50.f, TEXT("None"));
-}
 
 void UBattle_Command_Widget::setkougekiButton(bool b)
 {
 	kougeki_button->SetIsEnabled(b);
+}
+
+void UBattle_Command_Widget::Enemy_Button_Clicked()
+{
+
+}
+
+TArray<TPair<int32, int32>> UBattle_Command_Widget::getPair()
+{
+	return pair;
+}
+
+void UBattle_Command_Widget::setEnemy_Num(int32 num)
+{
+	enemy_num = num;
 }

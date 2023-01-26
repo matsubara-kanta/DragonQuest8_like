@@ -11,7 +11,7 @@
 #include "Components/Border.h"
 #include "Battle_Command_Widget.h"
 #include "Components/WidgetSwitcher.h"
-#include "../Field/PlayerDataAsset.h"
+#include "../PlayerDataAsset.h"
 #include "Battle_First_Widget.generated.h"
 
 #define INDEX_HP 0
@@ -28,7 +28,7 @@ public:
 	UWidgetSwitcher* getSwitcher();
 	void Init(TArray<FPlayerDataAssetRecord> player_infos);
 	void Update(TArray<FPlayerDataAssetRecord> player_infos);
-	void setNigeruButton(bool b);
+	void setBattle_First_Widget(bool b);
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
@@ -55,8 +55,6 @@ private:
 	UButton* Odokasu_Button;
 	UButton* Sakusen_Button;
 	UVerticalBox* Command_Box;
-	UCanvas* Command_Canvas;
-	UBorder* Command_Border;
 	UWidgetSwitcher* Battle_Switcher;
 	USoundBase* Sound_Select;
 	USoundBase* Sound_Nigeru;

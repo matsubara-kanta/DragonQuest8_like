@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PlayerDataAsset.h"
-#include "EnemyDataAsset.h"
+#include "../PlayerDataAsset.h"
 #include "../DQ8GameInstance.h"
 #include "FieldState.generated.h"
 
@@ -39,21 +38,13 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	int count;
 	int32 enemy_num;
-
-	UPROPERTY()
-		TSoftObjectPtr<class UPlayerDataAsset> player_asset;
-	UPROPERTY()
-		TSoftObjectPtr<class UEnemyDataAsset> enemy_asset;
-	TArray<FPlayerDataAssetRecord> player_infos;
 	TArray<FEnemyDataAssetRecord> enemy_infos;
+	TArray<FPlayerDataAssetRecord> player_infos;
 
-	void Load_Player();
-	void Player_Infos_Init();
+	void Player_Location_Init();
 	void Spawn_Enemy();
 	void Enemy_Infos_Init();
-	void Load_Enemy();
 
 
 
