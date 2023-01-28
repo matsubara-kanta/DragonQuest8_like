@@ -28,12 +28,6 @@ class ABattleGameModeBase : public AGameModeBase
 
 public:
 	ABattleGameModeBase();
-	~ABattleGameModeBase();
-	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TArray<FPlayerDataAssetRecord> player_infos;
-	UPROPERTY(EditAnywhere)
-	TArray<FEnemyDataAssetRecord> enemy_infos;
 
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
 		void setEnemyLocation();
@@ -51,11 +45,6 @@ public:
 		UBattle_First_Widget* getBattleFirstWidget();
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
 		void Init_Player();
-
-
-
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<FVector> enemy_pos;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -63,15 +52,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 enemy_num;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TArray<FPlayerDataAssetRecord> player_infos;
+
+
+
+	~ABattleGameModeBase();
+	virtual void Tick(float DeltaTime) override;
+
+
+
+
+
+
 
 
 
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UBattle_First_Widget* battle_first_w;
+		UBattle_First_Widget* battle_first_w;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UBattle_Command_Widget* battle_command_w;
+		UBattle_Command_Widget* battle_command_w;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -85,6 +87,7 @@ private:
 
 	UWidgetSwitcher* switcher;
 	int32 enemy_id;
+	UDQ8GameInstance* instance;
 
 	/* デバッグ用 */
 	void PressedD();

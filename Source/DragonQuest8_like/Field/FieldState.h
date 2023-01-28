@@ -26,12 +26,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(meta = (CallInEditor = "true"), Category = "test")
-		void DisplayByStaticmethod();
-
-	UFUNCTION(meta = (CallInEditor = "true"), Category = "test")
-		void DisplayByActor();
-
 
 protected:
 	// Called when the game starts or when spawned

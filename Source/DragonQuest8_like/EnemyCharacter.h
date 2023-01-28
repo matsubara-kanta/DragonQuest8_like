@@ -18,15 +18,17 @@ public:
 	AEnemyCharacter();
 	FEnemyDataAssetRecord getRecord();
 	void setID(int32 id);
+	void Print_All_Infos();
 
 protected:
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void searchRecord(FText text);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FEnemyDataAssetRecord enemy_record;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void setRecord(FEnemyDataAssetRecord record);
-	UFUNCTION(Blueprintcallable, Category = "Myfunc")
-	void searchRecord(FText text);
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FEnemyDataAssetRecord enemy_record;
 
 
 public:	

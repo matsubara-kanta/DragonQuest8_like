@@ -17,64 +17,65 @@ struct FEnemyData : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere)
-		int32 HP;
+		int32 HP = 0;
 	UPROPERTY(EditAnywhere)
-		int32 MP;
+		int32 MP = 0;
 	UPROPERTY(EditAnywhere)
-		int32 Lv;
+		int32 Lv = 0;
 	UPROPERTY(EditAnywhere)
-		int32 ATK;
+		int32 ATK = 0;
 	UPROPERTY(EditAnywhere)
-		int32 DEF;
+		int32 DEF = 0;
 	UPROPERTY(EditAnywhere)
-		int32 INT;
+		int32 INT = 0;
 	UPROPERTY(EditAnywhere)
-		int32 SPD;
+		int32 SPD = 0;
 	UPROPERTY(EditAnywhere)
-		int32 STATE; // キャラの状態
+		int32 STATE = 0; // キャラの状態
 	UPROPERTY(EditAnywhere)
-		int32 ID;
+		int32 ID = 0;
 	UPROPERTY(EditAnywhere)
-		int32 EXP;
+		int32 EXP = 0;
 	UPROPERTY(EditAnywhere)
-		int32 GOLD;
+		int32 GOLD = 0;
 
 };
 
 
 USTRUCT(BlueprintType)
+
 struct FEnemyDataAssetRecord
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 HP;
+		int32 HP = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 MP;
+		int32 MP = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 Lv;
+		int32 Lv = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 ATK;
+		int32 ATK = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 DEF;
+		int32 DEF = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 INT;
+		int32 INT = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 SPD;
+		int32 SPD = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 STATE; // キャラの状態
+		int32 STATE = 0; // キャラの状態
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int32 ID;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-
-		int32 EXP;
+		int32 ID = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 
-		int32 GOLD;
+		int32 EXP = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+
+		int32 GOLD = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FText NAME;
+		FText NAME = FText::FromString("");
 };
 
 UCLASS()

@@ -12,7 +12,7 @@ ABattleGameModeBase::ABattleGameModeBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	instance = UDQ8GameInstance::GetInstance();
 }
 
 ABattleGameModeBase::~ABattleGameModeBase()
@@ -52,14 +52,14 @@ void ABattleGameModeBase::Tick(float DeltaTime)
 void ABattleGameModeBase::PressedB()
 {
 	int32 index = switcher->GetActiveWidgetIndex();
-	if (0 < index) 
+	if (0 < index)
 	{
-		
+
 		if (battle_command_w->is_Spacer_Visible())
 		{
 			battle_command_w->backCommand();
 		}
-		else 
+		else
 		{
 			switcher->SetActiveWidgetIndex(index - 1);
 		}
@@ -70,10 +70,23 @@ void ABattleGameModeBase::PressedB()
 
 void ABattleGameModeBase::PressedD()
 {
-	for (int32 index = 0; index < player_infos.Num(); ++index)
+
+
+	for (int32 index = 0; index < instance->player_infos.Num(); ++index)
 	{
-		UKismetSystemLibrary::PrintString(this, "HP:	 " + FString::FromInt(player_infos[index].HP) + "            MP:  " + FString::FromInt(player_infos[index].MP) + "            Lv:  " + FString::FromInt(player_infos[index].Lv) + "           ATK:  " + FString::FromInt(player_infos[index].ATK) + "         DEF:  " + FString::FromInt(player_infos[index].DEF) + "           INT:  " + FString::FromInt(player_infos[index].INT) + "         SPD:  " + FString::FromInt(player_infos[index].SPD) + "         STATE:  " + FString::FromInt(player_infos[index].STATE) + "           ID:  " + FString::FromInt(player_infos[index].ID) + "          NAME:  " + player_infos[index].NAME.ToString(), true, true, FColor::Cyan, 10.f, TEXT("None"));
+		UKismetSystemLibrary::PrintString(this, "HP:	 " + FString::FromInt(instance->player_infos[index].HP) + "            MP:  " + FString::FromInt(instance->player_infos[index].MP) + "            Lv:  " + FString::FromInt(instance->player_infos[index].Lv) + "           ATK:  " + FString::FromInt(instance->player_infos[index].ATK) + "         DEF:  " + FString::FromInt(instance->player_infos[index].DEF) + "           INT:  " + FString::FromInt(instance->player_infos[index].INT) + "         SPD:  " + FString::FromInt(instance->player_infos[index].SPD) + "         STATE:  " + FString::FromInt(instance->player_infos[index].STATE) + "           ID:  " + FString::FromInt(instance->player_infos[index].ID) + "          NAME:  " + instance->player_infos[index].NAME.ToString(), true, true, FColor::Cyan, 10.f, TEXT("None"));
 	}
+
+	UKismetSystemLibrary::PrintString(this, "player:", true, true, FColor::Cyan, 10.0f);
+
+
+	UKismetSystemLibrary::PrintString(this, "\n", true, true, FColor::Cyan, 10.0f);
+	for (int32 index = 0; index < enemy_actors.Num(); ++index)
+	{
+		enemy_actors[index]->Print_All_Infos();
+	}
+	UKismetSystemLibrary::PrintString(this, "enemy:", true, true, FColor::Cyan, 10.0f);
+
 
 	UKismetSystemLibrary::PrintString(this, "PressedD");
 }
@@ -84,7 +97,7 @@ void ABattleGameModeBase::PressedK()
 		enemy_actors[kill]->Destroy();
 		kill++;
 	}
-	UKismetSystemLibrary::PrintString(this,"PressedK");
+	UKismetSystemLibrary::PrintString(this, "PressedK");
 }
 
 void ABattleGameModeBase::SetupInput()
@@ -105,7 +118,10 @@ void ABattleGameModeBase::Command_Wait()
 
 void ABattleGameModeBase::Attack()
 {
-	battle_first_w->Update(player_infos);
+	instance = UDQ8GameInstance::GetInstance();
+	ensure(instance != nullptr);
+
+	battle_first_w->Update(instance->player_infos);
 }
 
 void ABattleGameModeBase::Escape()
@@ -203,7 +219,6 @@ void  ABattleGameModeBase::setBattleFirstWidget(UBattle_First_Widget* widget)
 	{
 		switcher = battle_first_w->getSwitcher();
 		ensure(switcher);
-		battle_first_w->AddToViewport();
 	}
 
 }
@@ -216,11 +231,5 @@ UBattle_First_Widget* ABattleGameModeBase::getBattleFirstWidget()
 void ABattleGameModeBase::Init_Player()
 {
 	/* ƒvƒŒƒCƒ„[‚Ì‰Šú‰» */
-	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
-	ensure(instance != nullptr);
-	if (instance)
-	{
-		battle_first_w->Init(instance->player_infos);
-	}
-
+	battle_first_w->Init(instance->player_infos);
 }

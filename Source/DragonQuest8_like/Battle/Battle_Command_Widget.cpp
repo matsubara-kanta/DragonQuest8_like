@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
-#include "GameFramework/Character.h"
 #include "Battle_Command_Widget.h"
+#include "GameFramework/Character.h"
 #include "../EnemyCharacter.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
@@ -102,10 +101,8 @@ void UBattle_Command_Widget::Create_Enemy_UI(TArray<AEnemyCharacter*> enemy_acto
 {
 	if (enemy_texts.Num() != 0)
 	{
-		UKismetSystemLibrary::PrintString(this, "passed2");
 		for (int32 index = 0; index < enemy_actors.Num(); ++index)
 		{
-			UKismetSystemLibrary::PrintString(this, "passed3");
 			FSlateColor Color = FLinearColor::White;
 			enemy_texts[index]->SetColorAndOpacity(Color);
 			FSlateFontInfo TextInfo = enemy_texts[index]->GetFont();

@@ -12,7 +12,7 @@
 
 UBattle_First_Widget::UBattle_First_Widget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer), Hero_HP_Text(nullptr), Hero_MP_Text(nullptr), Hero_Lv_Text(nullptr), Yangasu_HP_Text(nullptr),
-	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Battle_Switcher(nullptr), Sound_Select(nullptr)
+	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Battle_Switcher(nullptr)
 {
 
 }

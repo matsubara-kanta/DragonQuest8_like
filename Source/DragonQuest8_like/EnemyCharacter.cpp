@@ -68,3 +68,8 @@ void AEnemyCharacter::setID(int32 id)
 {
 	enemy_record.ID = id;
 }
+
+void AEnemyCharacter::Print_All_Infos()
+{
+	UKismetSystemLibrary::PrintString(this, "HP:	 " + FString::FromInt(enemy_record.HP) + "            MP:  " + FString::FromInt(enemy_record.MP) + "            Lv:  " + FString::FromInt(enemy_record.Lv) + "           ATK:  " + FString::FromInt(enemy_record.ATK) + "         DEF:  " + FString::FromInt(enemy_record.DEF) + "           INT:  " + FString::FromInt(enemy_record.INT) + "         SPD:  " + FString::FromInt(enemy_record.SPD) + "         STATE:  " + FString::FromInt(enemy_record.STATE) + "           ID:  " + FString::FromInt(enemy_record.ID) + "          NAME:  " + enemy_record.NAME.ToString(), true, true, FColor::Cyan, 10.f, TEXT("None"));
+}

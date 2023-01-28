@@ -57,26 +57,6 @@ void AFieldState::Player_Location_Init()
 
 }
 
-
-
-void AFieldState::DisplayByStaticmethod()
-{
-	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
-	if (instance)
-	{
-		instance->DisplayDebugMessage(FString("DisplayByStaticmethod"));
-	}
-}
-
-void AFieldState::DisplayByActor()
-{
-	UDQ8GameInstance* instance = Cast<UDQ8GameInstance>(GetGameInstance());
-	if (instance)
-	{
-		instance->DisplayDebugMessage("DisplayByActor");
-	}
-}
-
 void AFieldState::Enemy_Infos_Init()
 {
 	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
