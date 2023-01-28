@@ -11,10 +11,6 @@
 UBattle_Command_Widget::UBattle_Command_Widget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer), kougeki_button(nullptr)
 {
-	static ConstructorHelpers::FObjectFinder< USoundBase > find_sound(TEXT("/Script/Engine.SoundWave'/Game/DragonQuest8_like/Scenes/Battle/Select_SE.Select_SE'"));
-	if (find_sound.Succeeded()) {
-		Sound_Select = find_sound.Object;
-	}
 }
 
 void UBattle_Command_Widget::NativeConstruct() {

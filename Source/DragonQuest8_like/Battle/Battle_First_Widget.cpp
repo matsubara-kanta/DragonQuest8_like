@@ -14,15 +14,6 @@ UBattle_First_Widget::UBattle_First_Widget(const FObjectInitializer& ObjectIniti
 	: Super(ObjectInitializer), Hero_HP_Text(nullptr), Hero_MP_Text(nullptr), Hero_Lv_Text(nullptr), Yangasu_HP_Text(nullptr),
 	Yangasu_MP_Text(nullptr), Yangasu_Lv_Text(nullptr), Tatakau_Button(nullptr), Nigeru_Button(nullptr), Odokasu_Button(nullptr), Sakusen_Button(nullptr), Command_Box(nullptr), Battle_Switcher(nullptr), Sound_Select(nullptr)
 {
-	static ConstructorHelpers::FObjectFinder< USoundBase > find_sound(TEXT("/Script/Engine.SoundWave'/Game/DragonQuest8_like/Scenes/Battle/Select_SE.Select_SE'"));
-	if (find_sound.Succeeded()) {
-		Sound_Select = find_sound.Object;
-	}
-
-	static ConstructorHelpers::FObjectFinder< USoundBase > find_sound2(TEXT("/Script/Engine.SoundWave'/Game/DragonQuest8_like/Scenes/Battle/Nigeru_SE.Nigeru_SE'"));
-	if (find_sound2.Succeeded()) {
-		Sound_Nigeru = find_sound2.Object;
-	}
 
 }
 

@@ -24,24 +24,31 @@ class UBattle_First_Widget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Select;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Nigeru;
+
 	UBattle_First_Widget(const FObjectInitializer& ObjectInitializer);
 	UWidgetSwitcher* getSwitcher();
 	void Init(TArray<FPlayerDataAssetRecord> player_infos);
 	void Update(TArray<FPlayerDataAssetRecord> player_infos);
 	void setBattle_First_Widget(bool b);
 
+
 protected:
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-	virtual void NativeConstruct() override;
-	virtual void NativePreConstruct() override;
-	virtual void NativeDestruct() override;
-	virtual void NativeOnInitialized() override;
 	UFUNCTION(BlueprintCallable, Category = "Test")
 		void TestClicked() { UE_LOG(LogTemp, Log, TEXT("Clicked")); }
 	UFUNCTION(BlueprintCallable, Category = "Myfunc")
 		void Invisible_Clicked();
 	UFUNCTION(BlueprintCallable, Category = "Myfunc")
 		void Change_State();
+
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	virtual void NativeConstruct() override;
+	virtual void NativePreConstruct() override;
+	virtual void NativeDestruct() override;
+	virtual void NativeOnInitialized() override;
 
 private:
 	UTextBlock* Hero_HP_Text;
@@ -56,8 +63,6 @@ private:
 	UButton* Sakusen_Button;
 	UVerticalBox* Command_Box;
 	UWidgetSwitcher* Battle_Switcher;
-	USoundBase* Sound_Select;
-	USoundBase* Sound_Nigeru;
 	TArray<UTextBlock*> Hero_Text;
 	TArray<UTextBlock*> Yangasu_Text;
 	TArray<TArray<UTextBlock*>> Text;

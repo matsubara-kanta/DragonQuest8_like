@@ -26,7 +26,7 @@
 
 
 /**
- * 
+ *
  */
 
 
@@ -34,16 +34,20 @@ UCLASS()
 class UBattle_Command_Widget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void Create_Enemy_UI(TArray<AEnemyCharacter*> enemy_actors);
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void setEnemy_Num(int32 num);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Select;
+
+
 	UBattle_Command_Widget(const FObjectInitializer& ObjectInitializer);
 	bool is_Spacer_Visible();
 	void backCommand();
 	void setkougekiButton(bool b);
-	UFUNCTION(Blueprintcallable, Category = "Myfunc")
-	void Create_Enemy_UI(TArray<AEnemyCharacter*> enemy_actors);
-	UFUNCTION(Blueprintcallable, Category = "Myfunc")
-	void setEnemy_Num(int32 num);
 	TArray<TPair<int32, int32>> getPair();
 
 
@@ -58,19 +62,19 @@ protected:
 	virtual void NativeOnInitialized() override;
 
 private:
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void Pressed_kougeki();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void Enemy_Button_Clicked();
+
 	UButton* kougeki_button;
 	TArray<UButton*> enemy_buttons;
 	TArray<UTextBlock*> enemy_texts;
 	TArray<UTextBlock*> enemy_num_texts;
 	UCanvasPanel* enemy_canvas;
 	UCanvasPanel* party_canvas;
-	USoundBase* Sound_Select;
 	USpacer* disable_spacer;
 	TArray<TPair<int32, int32>> pair; // (攻撃プレイヤーのインデックス、攻撃対象のインデックス)
-	UFUNCTION(Blueprintcallable, Category = "Myfunc")
-		void Pressed_kougeki();
-		UFUNCTION(Blueprintcallable, Category = "Myfunc")
-		void Enemy_Button_Clicked();
 	int32 enemy_num;
 
 
