@@ -79,7 +79,7 @@ void AFieldGameModeBase::Enemy_Infos_Init()
 void AFieldGameModeBase::Spawn_Enemy()
 {
 	FVector pos = UGameplayStatics::GetPlayerPawn(this->GetWorld(), 0)->GetActorLocation();
-	pos = FVector(pos.X, pos.Y, 0);
+	pos = FVector(pos.X, pos.Y, 90);
 	ensure(enemy_infos.Num() != 0);
 	for (int32 index = 0; index < enemy_num; ++index)
 	{
