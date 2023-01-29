@@ -3,26 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/GameModeBase.h"
 #include "../PlayerDataAsset.h"
 #include "../DQ8GameInstance.h"
-#include "FieldState.generated.h"
+#include "FieldGameModeBase.generated.h"
+
 
 #define INTERVAL 60*3
 #define MAXRANGE 9
 #define MINRANGE 0
-#define ENEMY_MAX_NUM 10
-#define ENEMY_MAX_CLASS 6
+#define ENEMY_MAX_NUM 10 // スポーンできる敵の最大値
+#define ENEMY_MAX_CLASS 6 // 敵の種類の数
 
-
+/**
+ * 
+ */
 UCLASS()
-class AFieldState : public AActor
+class DRAGONQUEST8_LIKE_API AFieldGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-
+	
 public:
 	// Sets default values for this actor's properties
-	AFieldState();
+	AFieldGameModeBase();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -39,7 +42,5 @@ private:
 	void Player_Location_Init();
 	void Spawn_Enemy();
 	void Enemy_Infos_Init();
-
-
 
 };

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "FieldState.h"
+#include "FieldGameModeBase.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "HAL/PlatformProcess.h"
@@ -11,16 +11,20 @@
 
 
 // Sets default values
-AFieldState::AFieldState()
+AFieldGameModeBase::AFieldGameModeBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/DragonQuest8_like/MyDragonQuest8_likeCharacter"));
+	if (PlayerPawnBPClass.Class != NULL)
+	{
+		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
 
 }
 
 // Called when the game starts or when spawned
-void AFieldState::BeginPlay()
+void AFieldGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -39,14 +43,14 @@ void AFieldState::BeginPlay()
 }
 
 // Called every frame
-void AFieldState::Tick(float DeltaTime)
+void AFieldGameModeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
 
 
-void AFieldState::Player_Location_Init()
+void AFieldGameModeBase::Player_Location_Init()
 {
 	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
 	ensure(instance != nullptr);
@@ -57,7 +61,7 @@ void AFieldState::Player_Location_Init()
 
 }
 
-void AFieldState::Enemy_Infos_Init()
+void AFieldGameModeBase::Enemy_Infos_Init()
 {
 	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
 	ensure(instance);
@@ -72,7 +76,7 @@ void AFieldState::Enemy_Infos_Init()
 	}
 }
 
-void AFieldState::Spawn_Enemy()
+void AFieldGameModeBase::Spawn_Enemy()
 {
 	FVector pos = UGameplayStatics::GetPlayerPawn(this->GetWorld(), 0)->GetActorLocation();
 	pos = FVector(pos.X, pos.Y, 0);
