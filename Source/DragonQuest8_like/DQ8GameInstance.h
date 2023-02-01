@@ -17,7 +17,7 @@ class DRAGONQUEST8_LIKE_API UDQ8GameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
-		TArray<FPlayerDataAssetRecord> player_infos;
+		TMap<int32,FPlayerDataAssetRecord> player_infos;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
 		FVector player_pos;
@@ -29,7 +29,7 @@ public:
 		int32 enemy_id; // 当たった敵をバトルでもスポーンさせる
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-		TArray<FEnemyDataAssetRecord> enemy_infos;
+		TMap<int32,FEnemyDataAssetRecord> enemy_infos;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		 UEnemyDataAsset* enemy_asset;

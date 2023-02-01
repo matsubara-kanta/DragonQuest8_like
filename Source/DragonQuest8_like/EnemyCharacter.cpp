@@ -33,9 +33,21 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void AEnemyCharacter::setRecord(FEnemyDataAssetRecord record)
+void AEnemyCharacter::setRecord(FEnemyDataAssetRecord* record)
 {
-	enemy_record = record;
+	enemy_record.ATK = record->ATK;
+	enemy_record.DEF = record->DEF;
+	enemy_record.HP = record->HP;
+	enemy_record.ID = record->ID;
+	enemy_record.INT = record->INT;
+	enemy_record.Lv = record->Lv;
+	enemy_record.MP = record->MP;
+	enemy_record.NAME = record->NAME;
+	enemy_record.SPD = record->SPD;
+	enemy_record.STATE = record->STATE;
+	enemy_record.EXP = record->EXP;
+	enemy_record.GOLD = record->GOLD;
+	enemy_record.myclass = record->myclass;
 }
 
 FEnemyDataAssetRecord AEnemyCharacter::getRecord()
@@ -43,24 +55,14 @@ FEnemyDataAssetRecord AEnemyCharacter::getRecord()
 	return enemy_record;
 }
 
-void AEnemyCharacter::searchRecord(FText str)
+void AEnemyCharacter::searchRecord(int32 index)
 {
-	FString s = str.ToString();
 	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
 	ensure(instance != nullptr);
+	FEnemyDataAssetRecord* record = instance->enemy_infos.Find(index);
+	setRecord(record);
 
-	for (FEnemyDataAssetRecord record : instance->enemy_infos)
-	{
-		if (s.StartsWith(record.NAME.ToString()))
-		{
-			//UE_LOG(LogTemp, Warning, TEXT("record pass"));
-			setRecord(record);
-			//UKismetSystemLibrary::PrintText(this,enemy_record.NAME);
-			return;
-		}
-	}
-
-	UE_LOG(LogTemp, Warning, TEXT("no record found"));
+	//UE_LOG(LogTemp, Warning, TEXT("no record found"));
 	return;
 }
 

@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		int32 GOLD = 0;
 
+	UPROPERTY(EditAnywhere)
+		UClass* myclass = nullptr;
+
 };
 
 
@@ -76,6 +79,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FText NAME = FText::FromString("");
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UClass* myclass = nullptr;
+
 };
 
 UCLASS()

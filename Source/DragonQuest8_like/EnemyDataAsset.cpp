@@ -32,6 +32,7 @@ void UEnemyDataAsset::Import()
         asset.EXP = record->EXP;
         asset.GOLD = record->GOLD;
         asset.NAME = FText::FromName(Names[i]);
+        asset.myclass = record->myclass;
         Data.Add(asset);
     }
 

@@ -22,13 +22,13 @@ public:
 
 protected:
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
-		void searchRecord(FText text);
+		void searchRecord(int32 index);
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FEnemyDataAssetRecord enemy_record;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void setRecord(FEnemyDataAssetRecord record);
+	void setRecord(FEnemyDataAssetRecord* record);
 
 
 public:	

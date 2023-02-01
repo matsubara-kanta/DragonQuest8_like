@@ -31,9 +31,9 @@ public:
 
 	UBattle_First_Widget(const FObjectInitializer& ObjectInitializer);
 	UWidgetSwitcher* getSwitcher();
-	void Init(TArray<FPlayerDataAssetRecord> player_infos);
-	void Update(TArray<FPlayerDataAssetRecord> player_infos);
-	void setBattle_First_Widget(bool b);
+	void Init(TMap<int32,FPlayerDataAssetRecord> player_infos);
+	void Update(TMap<int32,FPlayerDataAssetRecord> player_infos);
+	void Command_Wait();
 
 
 protected:

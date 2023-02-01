@@ -24,7 +24,7 @@ void UDQ8GameInstance::Player_Infos_Init()
 	{
 		for (int32 index = 0; index < player_asset->Data.Num(); index++) // プレイヤーのパラメータ初期化
 		{
-			player_infos.Add(player_asset->Data[index]);
+			player_infos.Add(index,player_asset->Data[index]);
 		}
 
 	}
@@ -37,7 +37,7 @@ void UDQ8GameInstance::Enemy_Infos_Init()
 	{
 		for (int32 index = 0; index < enemy_asset->Data.Num(); index++)
 		{
-			enemy_infos.Add(enemy_asset->Data[index]);
+			enemy_infos.Add(index,enemy_asset->Data[index]);
 		}
 	}
 }

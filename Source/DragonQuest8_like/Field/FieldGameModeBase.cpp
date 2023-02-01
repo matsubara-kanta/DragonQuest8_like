@@ -71,7 +71,7 @@ void AFieldGameModeBase::Enemy_Infos_Init()
 	{
 		for (int32 index = 0; index < enemy_num; index++)
 		{
-			enemy_infos.Add(instance->enemy_infos[FMath::RandRange(0, ENEMY_MAX_CLASS - 1)]); // ランダムスポーン
+			enemy_infos.Add(index,instance->enemy_infos[FMath::RandRange(0, ENEMY_MAX_CLASS - 1)]); // ランダムスポーン
 		}
 	}
 }
@@ -83,14 +83,7 @@ void AFieldGameModeBase::Spawn_Enemy()
 	ensure(enemy_infos.Num() != 0);
 	for (int32 index = 0; index < enemy_num; ++index)
 	{
-		FString str = enemy_infos[index].NAME.ToString() + "_BP";
-		FString name = str + "." + str + "_C'";
-		FString path = "/Script/Engine.Blueprint'/Game/DragonQuest8_like/Scenes/Field/Enemy/" + name;
-		TSubclassOf<class AActor> sc = TSoftClassPtr<AActor>(FSoftObjectPath(*path)).LoadSynchronous(); // 上記で設定したパスに該当するクラスを取得
-		if (sc != nullptr)
-		{
-
-			AActor* a = GetWorld()->SpawnActor<AActor>(sc); // スポーン処理
+			AActor* a = GetWorld()->SpawnActor<AActor>(enemy_infos.Find(index)->myclass); // スポーン処理
 
 			int32 x = FMath::RandRange(-2000, 2000);
 			while (-200 < x && x < 200)
@@ -101,6 +94,5 @@ void AFieldGameModeBase::Spawn_Enemy()
 				y = FMath::RandRange(-600, 600);
 
 			a->SetActorLocation(pos + FVector(x, y, 0));
-		}
 	}
 }

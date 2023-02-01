@@ -16,16 +16,20 @@
 #define ENEMY_MAX_CLASS 6 // ìGÇÃéÌóﬁÇÃêî
 
 /**
- * 
+ *
  */
 UCLASS()
 class DRAGONQUEST8_LIKE_API AFieldGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 public:
 	// Sets default values for this actor's properties
 	AFieldGameModeBase();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TMap<int32,FEnemyDataAssetRecord> enemy_infos;
+
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -36,8 +40,7 @@ protected:
 
 private:
 	int32 enemy_num;
-	TArray<FEnemyDataAssetRecord> enemy_infos;
-	TArray<FPlayerDataAssetRecord> player_infos;
+	TMap<int32,FPlayerDataAssetRecord> player_infos;
 
 	void Player_Location_Init();
 	void Spawn_Enemy();

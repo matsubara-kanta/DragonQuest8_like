@@ -145,36 +145,36 @@ void UBattle_First_Widget::NativePreConstruct()
 	Super::NativePreConstruct();
 }
 
-void UBattle_First_Widget::Init(TArray<FPlayerDataAssetRecord> player_infos)
+void UBattle_First_Widget::Init(TMap<int32,FPlayerDataAssetRecord> player_infos)
 {
 	//UKismetSystemLibrary::PrintString(this, FString::FromInt(player_infos.Num()), true, true, FColor::Cyan, 50.f, TEXT("None"));
 	//UE_LOG(LogTemp, Warning, TEXT("num: %d"), player_infos.Num());
 
-	for (int32 Index = 0; Index != player_infos.Num(); ++Index)
+	for (int32 index = 0; index != player_infos.Num(); ++index)
 	{
-		int32 HP = player_infos[Index].HP;
-		int32 MP = player_infos[Index].MP;
-		int32 Lv = player_infos[Index].Lv;
+		int32 HP = player_infos.Find(index)->HP;
+		int32 MP = player_infos.Find(index)->MP;
+		int32 Lv = player_infos.Find(index)->Lv;
 		FString Str_HP = FString::Printf(TEXT("HP : %d"), HP);
 		FString Str_MP = FString::Printf(TEXT("MP : %d"), MP);
 		FString Str_Lv = FString::Printf(TEXT("Lv   : %d"), Lv);
-		Text[Index][INDEX_HP]->SetText(FText::FromString(Str_HP));
-		Text[Index][INDEX_MP]->SetText(FText::FromString(Str_MP));
-		Text[Index][INDEX_Lv]->SetText(FText::FromString(Str_Lv));
+		Text[index][INDEX_HP]->SetText(FText::FromString(Str_HP));
+		Text[index][INDEX_MP]->SetText(FText::FromString(Str_MP));
+		Text[index][INDEX_Lv]->SetText(FText::FromString(Str_Lv));
 	}
 
 }
 
-void UBattle_First_Widget::Update(TArray<FPlayerDataAssetRecord> player_infos)
+void UBattle_First_Widget::Update(TMap<int32,FPlayerDataAssetRecord> player_infos)
 {
-	for (int32 Index = 0; Index < player_infos.Num(); Index++)
+	for (int32 index = 0; index < player_infos.Num(); index++)
 	{
-		int32 HP = player_infos[Index].HP;
-		int32 MP = player_infos[Index].MP;
+		int32 HP = player_infos.Find(index)->HP;
+		int32 MP = player_infos.Find(index)->MP;
 		FString Str_HP = FString::Printf(TEXT("HP : %d"), HP);
 		FString Str_MP = FString::Printf(TEXT("MP : %d"), MP);
-		Text[Index][INDEX_HP]->SetText(FText::FromString(Str_HP));
-		Text[Index][INDEX_MP]->SetText(FText::FromString(Str_MP));
+		Text[index][INDEX_HP]->SetText(FText::FromString(Str_HP));
+		Text[index][INDEX_MP]->SetText(FText::FromString(Str_MP));
 	}
 
 }
@@ -194,7 +194,7 @@ UWidgetSwitcher* UBattle_First_Widget::getSwitcher()
 
 void UBattle_First_Widget::Change_State()
 {
-	setBattle_First_Widget(false);
+	this->SetIsEnabled(false);
 	state = Battle_State::Escape;
 	bool flag; // “¦‚°‚ç‚ê‚é‚©‚Ç‚¤‚©
 	int random = FMath::RandRange(0, 9);
@@ -224,7 +224,7 @@ void UBattle_First_Widget::Change_State()
 	}
 }
 
-void UBattle_First_Widget::setBattle_First_Widget(bool b)
+void UBattle_First_Widget::Command_Wait()
 {
-	this->SetIsEnabled(b);
+	this->SetIsEnabled(true);
 }

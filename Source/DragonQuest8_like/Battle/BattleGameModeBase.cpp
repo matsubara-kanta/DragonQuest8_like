@@ -118,7 +118,8 @@ void ABattleGameModeBase::Command_Wait()
 {
 	// ƒRƒ}ƒ“ƒh‚ª‚¢‚­‚Â“ü—Í‚³‚ê‚½‚©Žæ“¾
 	//state = Battle_State::Attack;
-	battle_first_w->setBattle_First_Widget(true);
+	if(battle_first_w != nullptr)
+	battle_first_w->Command_Wait();
 }
 
 void ABattleGameModeBase::Attack()
