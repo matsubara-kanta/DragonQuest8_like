@@ -13,6 +13,7 @@
 #include "Battle_Command_Widget.h"
 #include "../PlayerDataAsset.h"
 #include "../EnemyDataAsset.h"
+#include "../DragonQuest8_likeGameMode.h"
 #include "BattleGameModeBase.generated.h"
 
 
@@ -22,7 +23,7 @@
  *
  */
 UCLASS()
-class ABattleGameModeBase : public AGameModeBase
+class ABattleGameModeBase : public ADragonQuest8_likeGameMode
 {
 	GENERATED_BODY()
 

@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "../PlayerDataAsset.h"
 #include "../DQ8GameInstance.h"
+#include "../DragonQuest8_likeGameMode.h"
 #include "FieldGameModeBase.generated.h"
 
 
@@ -19,7 +20,7 @@
  *
  */
 UCLASS()
-class DRAGONQUEST8_LIKE_API AFieldGameModeBase : public AGameModeBase
+class DRAGONQUEST8_LIKE_API AFieldGameModeBase : public ADragonQuest8_likeGameMode
 {
 	GENERATED_BODY()
 
