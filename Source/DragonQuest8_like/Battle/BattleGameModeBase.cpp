@@ -12,6 +12,13 @@ ABattleGameModeBase::ABattleGameModeBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/DragonQuest8_like/MyDragonQuest8_likeCharacter"));
+	if (PlayerPawnBPClass.Class != NULL)
+	{
+		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+
 	instance = UDQ8GameInstance::GetInstance();
 }
 
@@ -113,8 +120,8 @@ void ABattleGameModeBase::Command_Wait()
 {
 	// ƒRƒ}ƒ“ƒh‚ª‚¢‚­‚Â“ü—Í‚³‚ê‚½‚©Žæ“¾
 	//state = Battle_State::Attack;
-	if(battle_first_w != nullptr)
-	battle_first_w->Command_Wait();
+	if (battle_first_w != nullptr)
+		battle_first_w->Command_Wait();
 }
 
 void ABattleGameModeBase::Attack()

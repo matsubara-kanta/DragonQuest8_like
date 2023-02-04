@@ -18,6 +18,27 @@
 #define INDEX_MP 1
 #define INDEX_Lv 2
 
+
+USTRUCT(BlueprintType)
+struct FPlayerText
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTextBlock* HP_Text;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+
+		UTextBlock* MP_Text;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+
+		UTextBlock* Lv_Text;
+
+
+};
+
 UCLASS()
 class UBattle_First_Widget : public UUserWidget
 {
@@ -29,18 +50,24 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USoundBase* Sound_Nigeru;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UWidgetSwitcher* Battle_Switcher;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FPlayerText> Texts;
+
+
 	UBattle_First_Widget(const FObjectInitializer& ObjectInitializer);
 	UWidgetSwitcher* getSwitcher();
-	void Init(TMap<int32,FPlayerDataAssetRecord> player_infos);
-	void Update(TMap<int32,FPlayerDataAssetRecord> player_infos);
+	void Init(TMap<int32, FPlayerDataAssetRecord> player_infos);
+	void Update(TMap<int32, FPlayerDataAssetRecord> player_infos);
 	void Command_Wait();
 
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Test")
-		void TestClicked() { UE_LOG(LogTemp, Log, TEXT("Clicked")); }
 	UFUNCTION(BlueprintCallable, Category = "Myfunc")
-		void Invisible_Clicked();
+		void TatakauButton_Clicked();
+
 	UFUNCTION(BlueprintCallable, Category = "Myfunc")
 		void Change_State();
 
@@ -51,21 +78,6 @@ protected:
 	virtual void NativeOnInitialized() override;
 
 private:
-	UTextBlock* Hero_HP_Text;
-	UTextBlock* Hero_MP_Text;
-	UTextBlock* Hero_Lv_Text;
-	UTextBlock* Yangasu_HP_Text;
-	UTextBlock* Yangasu_MP_Text;
-	UTextBlock* Yangasu_Lv_Text;
-	UButton* Tatakau_Button;
-	UButton* Nigeru_Button;
-	UButton* Odokasu_Button;
-	UButton* Sakusen_Button;
-	UVerticalBox* Command_Box;
-	UWidgetSwitcher* Battle_Switcher;
-	TArray<UTextBlock*> Hero_Text;
-	TArray<UTextBlock*> Yangasu_Text;
-	TArray<TArray<UTextBlock*>> Text;
 
 
 };
