@@ -40,8 +40,34 @@ public:
 		void Create_Enemy_UI(TArray<AEnemyCharacter*> enemy_actors);
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
 		void setEnemy_Num(int32 num);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USoundBase* Sound_Select;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UCanvasPanel* enemy_canvas;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UCanvasPanel* party_canvas;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USpacer* disable_spacer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UButton* kougeki_button;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TMap<int32, UTextBlock*> enemy_texts;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TMap<int32, UButton*> enemy_buttons;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TMap<int32, UTextBlock*> enemy_num_texts;
+
+
+
+
 
 
 	UBattle_Command_Widget(const FObjectInitializer& ObjectInitializer);
@@ -67,13 +93,6 @@ private:
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
 		void Enemy_Button_Clicked();
 
-	UButton* kougeki_button;
-	TArray<UButton*> enemy_buttons;
-	TArray<UTextBlock*> enemy_texts;
-	TArray<UTextBlock*> enemy_num_texts;
-	UCanvasPanel* enemy_canvas;
-	UCanvasPanel* party_canvas;
-	USpacer* disable_spacer;
 	TArray<TPair<int32, int32>> pair; // (攻撃プレイヤーのインデックス、攻撃対象のインデックス)
 	int32 enemy_num;
 

@@ -16,62 +16,6 @@ void UBattle_Command_Widget::NativeConstruct() {
 	Super::NativeConstruct();
 	//UE_LOG(LogTemp, Warning, TEXT("Output3: %s"), *HBox_Child->GetAllChildren()[i]->GetName());
 
-	for (int32 index = 0; index < ENEMY_NUM_MAX; ++index) {
-
-		FString str1 = "Enemy_Text" + FString::FromInt(index + 1);
-		UTextBlock* tmp = Cast<UTextBlock>(GetWidgetFromName(FName(str1)));
-		ensure(tmp != nullptr);
-		if (tmp != nullptr)
-		{
-			enemy_texts.Add(tmp);
-		}
-
-		FString str2 = "Enemy_Button" + FString::FromInt(index + 1);
-		UButton* button = Cast<UButton>(GetWidgetFromName(FName(str2)));
-		ensure(button != nullptr);
-		if (button != nullptr)
-		{
-			enemy_buttons.Add(button);
-		}
-
-		FString str3 = "Enemy_Num_Text" + FString::FromInt(index + 1);
-		UTextBlock* text = Cast<UTextBlock>(GetWidgetFromName(FName(str3)));
-		ensure(text != nullptr);
-		if (text != nullptr)
-		{
-			enemy_num_texts.Add(text);
-		}
-
-	}
-
-	UCanvasPanel* panel1 = Cast<UCanvasPanel>(GetWidgetFromName("Enemy_Panel"));
-	ensure(panel1 != nullptr);
-	if (panel1 != nullptr) {
-		enemy_canvas = panel1;
-	}
-
-
-	UButton* Button = Cast<UButton>(GetWidgetFromName("Kougeki_Button"));
-	ensure(Button != nullptr);
-	if (Button != nullptr) {
-		kougeki_button = Button;
-	}
-
-	if (!kougeki_button->OnClicked.IsBound()) {
-		kougeki_button->OnClicked.AddDynamic(this, &UBattle_Command_Widget::Pressed_kougeki);
-	}
-
-	USpacer* spacer = Cast<USpacer>(GetWidgetFromName("Disable_Spacer"));
-	ensure(spacer != nullptr);
-	if (spacer != nullptr) {
-		disable_spacer = spacer;
-	}
-
-	UCanvasPanel* panel2 = Cast<UCanvasPanel>(GetWidgetFromName("Party_Panel"));
-	ensure(panel2 != nullptr);
-	if (panel2 != nullptr) {
-		party_canvas = panel2;
-	}
 }
 
 
