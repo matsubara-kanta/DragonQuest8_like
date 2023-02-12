@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -18,7 +19,7 @@ ADragonQuest8_likeCharacter::ADragonQuest8_likeCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -73,7 +74,7 @@ void ADragonQuest8_likeCharacter::SetupPlayerInputComponent(class UInputComponen
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		//Jumping
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -101,7 +102,7 @@ void ADragonQuest8_likeCharacter::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
@@ -140,6 +141,23 @@ void ADragonQuest8_likeCharacter::setRecord(FPlayerDataAssetRecord record)
 	player_record.NEXTLv_EXP = record.NEXTLv_EXP;
 }
 
+FPlayerDataAssetRecord ADragonQuest8_likeCharacter::getRecord()
+{
+	return player_record;
+}
 
+void ADragonQuest8_likeCharacter::searchRecord(int32 index)
+{
+	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
+	ensure(instance != nullptr);
+	FPlayerDataAssetRecord* record = instance->player_infos.Find(index);
+	setRecord(*record);
 
+	//UE_LOG(LogTemp, Warning, TEXT("no record found"));
+	return;
+}
+void ADragonQuest8_likeCharacter::Print_All_Infos()
+{
+	UKismetSystemLibrary::PrintString(this, "HP:	 " + FString::FromInt(player_record.HP) + "            MP:  " + FString::FromInt(player_record.MP) + "            Lv:  " + FString::FromInt(player_record.Lv) + "           ATK:  " + FString::FromInt(player_record.ATK) + "         DEF:  " + FString::FromInt(player_record.DEF) + "           INT:  " + FString::FromInt(player_record.INT) + "         SPD:  " + FString::FromInt(player_record.SPD) + "         STATE:  " + FString::FromInt(player_record.STATE) + "           ID:  " + FString::FromInt(player_record.ID) + "          NAME:  " + player_record.NAME.ToString(), true, true, FColor::Cyan, 10.f, TEXT("None"));
+}
 

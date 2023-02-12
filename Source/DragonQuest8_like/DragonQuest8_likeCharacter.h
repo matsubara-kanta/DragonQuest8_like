@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "PlayerDataAsset.h"
+#include "DQ8GameInstance.h"
 #include "DragonQuest8_likeCharacter.generated.h"
 
 
@@ -40,7 +41,14 @@ class ADragonQuest8_likeCharacter : public ACharacter
 
 public:
 	ADragonQuest8_likeCharacter();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void searchRecord(int32 index);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FPlayerDataAssetRecord player_record;
+
 	void setRecord(FPlayerDataAssetRecord record);
+	FPlayerDataAssetRecord getRecord();
+	void Print_All_Infos();
 
 	
 
@@ -67,7 +75,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 private:
-	FPlayerDataAssetRecord player_record;
+	
 
 
 };

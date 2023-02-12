@@ -14,10 +14,13 @@
 #include "../PlayerDataAsset.h"
 #include "../EnemyDataAsset.h"
 #include "../DragonQuest8_likeGameMode.h"
+#include "../DragonQuest8_likeCharacter.h"
 #include "BattleGameModeBase.generated.h"
 
 
 #define DURATION 2.0f
+#define DEAD 1
+#define ALIVE 0
 
 /**
  *
@@ -56,6 +59,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<FPlayerDataAssetRecord> player_infos;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TArray<ADragonQuest8_likeCharacter*> player_actors;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Finish;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Battle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAudioComponent* audio;
 
 
 	~ABattleGameModeBase();
@@ -64,15 +78,10 @@ public:
 
 
 
-
-
-
-
-
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UBattle_First_Widget* battle_first_w;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UBattle_Command_Widget* battle_command_w;
 
@@ -85,10 +94,24 @@ private:
 	void Command_Wait();
 	void Attack();
 	void Escape();
+	void Disable();
+	void Enable();
+	void Init();
+	void Finish();
+	void Stack_Sort();
+	void Execute_Attack();
+	void Calculate_PlayerAttack(FPlayerDataAssetRecord player);
+	void Calculate_EnemyAttack(FEnemyDataAssetRecord enemy);
 
 	UWidgetSwitcher* switcher;
 	int32 enemy_id;
 	UDQ8GameInstance* instance;
+	TArray<int32> enemy_array;
+	int32 enemy_deadcount; // 倒した敵の数
+	int32 player_deadcount; // 倒されたプレイヤーの数
+	TSet<int32> dead_id; // 倒した敵のID
+	TArray<ADragonQuest8_likeCharacter*> player_order; // 順番を決めるスタック
+	TArray<AEnemyCharacter*> enemy_order;
 
 	/* デバッグ用 */
 	void PressedD();

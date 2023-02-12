@@ -26,15 +26,15 @@ struct FPlayerText
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UTextBlock* HP_Text;
+		UTextBlock* HP_Text = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 
-		UTextBlock* MP_Text;
+		UTextBlock* MP_Text = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 
-		UTextBlock* Lv_Text;
+		UTextBlock* Lv_Text = nullptr;
 
 
 };
@@ -59,9 +59,12 @@ public:
 
 	UBattle_First_Widget(const FObjectInitializer& ObjectInitializer);
 	UWidgetSwitcher* getSwitcher();
-	void Init(TMap<int32, FPlayerDataAssetRecord> player_infos);
+	void Init_Player(TMap<int32, FPlayerDataAssetRecord> player_infos);
 	void Update(TMap<int32, FPlayerDataAssetRecord> player_infos);
 	void Command_Wait();
+	void Attack();
+	void Escape();
+	void Init();
 
 
 protected:
@@ -78,6 +81,7 @@ protected:
 	virtual void NativeOnInitialized() override;
 
 private:
+
 
 
 };

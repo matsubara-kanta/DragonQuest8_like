@@ -16,6 +16,17 @@ class DRAGONQUEST8_LIKE_API AEnemyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemyCharacter();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void setRecord(FEnemyDataAssetRecord record);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
+		void Damaged();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
+		void Dead();
+
+
+
 	FEnemyDataAssetRecord getRecord();
 	void setID(int32 id);
 	void Print_All_Infos();
@@ -28,7 +39,6 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void setRecord(FEnemyDataAssetRecord* record);
 
 
 public:	

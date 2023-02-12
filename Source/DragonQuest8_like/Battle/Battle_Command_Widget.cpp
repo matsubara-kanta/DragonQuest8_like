@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "../EnemyCharacter.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Battle_State.h"
 
 
 
@@ -15,7 +16,6 @@ UBattle_Command_Widget::UBattle_Command_Widget(const FObjectInitializer& ObjectI
 void UBattle_Command_Widget::NativeConstruct() {
 	Super::NativeConstruct();
 	//UE_LOG(LogTemp, Warning, TEXT("Output3: %s"), *HBox_Child->GetAllChildren()[i]->GetName());
-
 }
 
 
@@ -54,11 +54,6 @@ void UBattle_Command_Widget::Create_Enemy_UI(TArray<AEnemyCharacter*> enemy_acto
 			enemy_texts[index]->SetFont(TextInfo);
 			//UKismetSystemLibrary::PrintString(this, "enemy: " + enemy_actors[index]->getRecord().NAME.ToString());
 			enemy_texts[index]->SetText(enemy_actors[index]->getRecord().NAME);
-
-			if (!enemy_buttons[index]->OnClicked.IsBound()) {
-				enemy_buttons[index]->OnClicked.AddDynamic(this, &UBattle_Command_Widget::Enemy_Button_Clicked);
-			}
-
 		}
 
 	}
@@ -102,17 +97,72 @@ void UBattle_Command_Widget::setkougekiButton(bool b)
 	kougeki_button->SetIsEnabled(b);
 }
 
-void UBattle_Command_Widget::Enemy_Button_Clicked()
+void UBattle_Command_Widget::Dec_EnemyArray()
 {
-
+	/* 配列の末尾の要素を削除して、決定したコマンドをリセット */
+	if (!enemy_array.IsEmpty())
+		enemy_array.RemoveAt(enemy_array.Num() - 1);
 }
 
-TArray<TPair<int32, int32>> UBattle_Command_Widget::getPair()
+void UBattle_Command_Widget::Enemy_Button_Clicked(UButton* button)
 {
-	return pair;
+	if (enemy_array.Num() < player_num) {
+		int32 index = *enemy_buttons.FindKey(button);
+		enemy_array.Add(index);
+		state = Battle_State::Disable;
+		backCommand();
+		setkougekiButton(true);
+	}
+}
+TArray<int32> UBattle_Command_Widget::getArray()
+{
+	return enemy_array;
 }
 
 void UBattle_Command_Widget::setEnemy_Num(int32 num)
 {
 	enemy_num = num;
+}
+
+void UBattle_Command_Widget::Command_Wait(TArray<ADragonQuest8_likeCharacter*> player)
+{
+	if (enemy_array.Num() < player_num)
+		character_name->SetText(player[enemy_array.Num()]->getRecord().NAME);
+
+	if (player_num == enemy_array.Num() && state != Battle_State::Attack)
+	{
+		this->SetVisibility(ESlateVisibility::Hidden);
+		state = Battle_State::Attack;
+		UKismetSystemLibrary::PrintString(this, "Attack");
+	}
+
+}
+
+void UBattle_Command_Widget::Init(int32 num, TSet<int32> set)
+{
+	enemy_array.Empty();
+	setPlayerNum(num);
+	this->SetVisibility(ESlateVisibility::Visible);
+
+	/* 倒した敵キャラを対象から除外するため、ボタンを削除 */
+	for (int32 id : set)
+	{
+		enemy_buttons[id]->RemoveFromParent();
+		enemy_num_texts[id]->RemoveFromParent();
+	}
+
+}
+
+void UBattle_Command_Widget::Enable()
+{
+}
+
+void UBattle_Command_Widget::Disable()
+{
+	state = Battle_State::Enable;
+}
+
+void UBattle_Command_Widget::setPlayerNum(int32 num)
+{
+	player_num = num;
 }

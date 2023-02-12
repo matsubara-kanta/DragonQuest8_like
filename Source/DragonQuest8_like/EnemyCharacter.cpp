@@ -33,21 +33,21 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void AEnemyCharacter::setRecord(FEnemyDataAssetRecord* record)
+void AEnemyCharacter::setRecord(FEnemyDataAssetRecord record)
 {
-	enemy_record.ATK = record->ATK;
-	enemy_record.DEF = record->DEF;
-	enemy_record.HP = record->HP;
-	enemy_record.ID = record->ID;
-	enemy_record.INT = record->INT;
-	enemy_record.Lv = record->Lv;
-	enemy_record.MP = record->MP;
-	enemy_record.NAME = record->NAME;
-	enemy_record.SPD = record->SPD;
-	enemy_record.STATE = record->STATE;
-	enemy_record.EXP = record->EXP;
-	enemy_record.GOLD = record->GOLD;
-	enemy_record.myclass = record->myclass;
+	enemy_record.ATK = record.ATK;
+	enemy_record.DEF = record.DEF;
+	enemy_record.HP = record.HP;
+	enemy_record.ID = record.ID;
+	enemy_record.INT = record.INT;
+	enemy_record.Lv = record.Lv;
+	enemy_record.MP = record.MP;
+	enemy_record.NAME = record.NAME;
+	enemy_record.SPD = record.SPD;
+	enemy_record.STATE = record.STATE;
+	enemy_record.EXP = record.EXP;
+	enemy_record.GOLD = record.GOLD;
+	enemy_record.myclass = record.myclass;
 }
 
 FEnemyDataAssetRecord AEnemyCharacter::getRecord()
@@ -60,7 +60,7 @@ void AEnemyCharacter::searchRecord(int32 index)
 	UDQ8GameInstance* instance = UDQ8GameInstance::GetInstance();
 	ensure(instance != nullptr);
 	FEnemyDataAssetRecord* record = instance->enemy_infos.Find(index);
-	setRecord(record);
+	setRecord(*record);
 
 	//UE_LOG(LogTemp, Warning, TEXT("no record found"));
 	return;

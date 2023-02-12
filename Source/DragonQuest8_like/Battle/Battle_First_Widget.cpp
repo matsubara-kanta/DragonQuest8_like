@@ -26,6 +26,7 @@ void UBattle_First_Widget::NativeTick(const FGeometry& MyGeometry, float InDelta
 {
 	// åpè≥å≥èàóù
 	Super::NativeTick(MyGeometry, InDeltaTime);
+
 }
 
 void UBattle_First_Widget::NativeOnInitialized()
@@ -43,7 +44,7 @@ void UBattle_First_Widget::NativePreConstruct()
 	Super::NativePreConstruct();
 }
 
-void UBattle_First_Widget::Init(TMap<int32,FPlayerDataAssetRecord> player_infos)
+void UBattle_First_Widget::Init_Player(TMap<int32,FPlayerDataAssetRecord> player_infos)
 {
 	//UKismetSystemLibrary::PrintString(this, FString::FromInt(player_infos.Num()), true, true, FColor::Cyan, 50.f, TEXT("None"));
 	//UE_LOG(LogTemp, Warning, TEXT("num: %d"), player_infos.Num());
@@ -118,11 +119,27 @@ void UBattle_First_Widget::Change_State()
 		GetWorld()->GetTimerManager().SetTimer(Handle, (TFunction<void(void)>&&)Func, 3.0f, false);
 	}
 	else {
-		state = Battle_State::Command_Wait;
+		state = Battle_State::Init;
 	}
 }
 
 void UBattle_First_Widget::Command_Wait()
 {
+}
+
+void UBattle_First_Widget::Attack()
+{
+	this->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UBattle_First_Widget::Escape()
+{
+
+}
+
+void UBattle_First_Widget::Init()
+{
+	this->SetVisibility(ESlateVisibility::Visible);
 	this->SetIsEnabled(true);
+	Battle_Switcher->SetActiveWidgetIndex(0);
 }

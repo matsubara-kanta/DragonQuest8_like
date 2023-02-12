@@ -17,9 +17,9 @@
 #include "Components/CanvasPanel.h"
 #include "../DQ8GameInstance.h"
 #include "../EnemyCharacter.h"
+#include "../DragonQuest8_likeCharacter.h"
 #include "Battle_Command_Widget.generated.h"
 
-#define ENEMY_NUM_MAX 5
 #define FONT_SIZE 32
 #define MAX_POS_R 400
 #define MAX_POS_L -400
@@ -65,7 +65,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TMap<int32, UTextBlock*> enemy_num_texts;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTextBlock* character_name;
 
+	void Command_Wait(TArray<ADragonQuest8_likeCharacter*> player);
+	void Init(int32 num, TSet<int32> array);
+	void Enable();
+	void Disable();
+	void Dec_EnemyArray();
 
 
 
@@ -74,7 +81,8 @@ public:
 	bool is_Spacer_Visible();
 	void backCommand();
 	void setkougekiButton(bool b);
-	TArray<TPair<int32, int32>> getPair();
+	TArray<int32> getArray();
+	void setPlayerNum(int32 num); // 生きているプレイヤーの数
 
 
 
@@ -91,10 +99,11 @@ private:
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
 		void Pressed_kougeki();
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
-		void Enemy_Button_Clicked();
+		void Enemy_Button_Clicked(UButton* button);
 
-	TArray<TPair<int32, int32>> pair; // (攻撃プレイヤーのインデックス、攻撃対象のインデックス)
+	TArray<int32> enemy_array; // (攻撃プレイヤーのインデックス、攻撃対象のインデックス)
 	int32 enemy_num;
+	int32 player_num;
 
 
 

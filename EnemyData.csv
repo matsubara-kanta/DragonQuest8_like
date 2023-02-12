@@ -1,7 +1,7 @@
 ---,HP,MP,Lv,ATK,DEF,INT,SPD,STATE,ID,EXP,GOLD,myclass
-Corpse_Melee,"10","10","10","10","10","10","10","0","0","10","10","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Corpse_Melee_BP.Corpse_Melee_BP_C'"
-Corpse_Sword,"10","10","10","10","10","10","10","0","1","10","10","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Corpse_Sword_BP.Corpse_Sword_BP_C'"
-Corpse_Spear,"0","0","15","15","15","15","15","0","2","15","15","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Corpse_Spear_BP.Corpse_Spear_BP_C'"
-Charger,"0","0","5","5","5","5","5","0","3","5","5","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Charger_BP.Charger_BP_C'"
-Large_Sword3,"0","0","30","30","30","30","30","0","4","30","30","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Large_Sword3_BP.Large_Sword3_BP_C'"
-Hooker,"0","0","20","20","20","20","20","0","5","20","20","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Hooker_BP.Hooker_BP_C'"
+Corpse_Melee,"5","10","3","2","2","2","2","0","0","10","10","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Corpse_Melee_BP.Corpse_Melee_BP_C'"
+Corpse_Sword,"3","10","2","1","1","1","1","0","1","10","10","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Corpse_Sword_BP.Corpse_Sword_BP_C'"
+Corpse_Spear,"6","15","3","2","2","2","2","0","2","15","15","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Corpse_Spear_BP.Corpse_Spear_BP_C'"
+Charger,"2","5","2","1","1","1","1","0","3","5","5","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Charger_BP.Charger_BP_C'"
+Large_Sword3,"8","30","6","8","5","5","3","0","4","30","30","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Large_Sword3_BP.Large_Sword3_BP_C'"
+Hooker,"7","20","6","4","4","4","4","0","5","20","20","/Script/Engine.BlueprintGeneratedClass'/Game/DragonQuest8_like/Scenes/Field/Enemy/Hooker_BP.Hooker_BP_C'"
