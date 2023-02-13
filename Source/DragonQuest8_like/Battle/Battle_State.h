@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 
-enum class Battle_State
+UENUM(BlueprintType)
+enum class Battle_State : uint8
 {
 	Command_Wait, // 入力待ち
 	Attack, // 攻撃
@@ -13,6 +14,8 @@ enum class Battle_State
 	Disable, // 入力無効
 	Enable, // 入力受付
 	Init, // 初期化
+	Animation, // アニメーション中
+	AnimationFinished, // アニメーション終わり
 	Nop, // 何もしない
 };
 

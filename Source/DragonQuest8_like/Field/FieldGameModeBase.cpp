@@ -71,7 +71,8 @@ void AFieldGameModeBase::Enemy_Infos_Init()
 	{
 		for (int32 index = 0; index < enemy_num; index++)
 		{
-			enemy_infos.Add(index,instance->enemy_infos[FMath::RandRange(0, ENEMY_MAX_CLASS - 1)]); // ランダムスポーン
+			 enemy_infos.Add(index,instance->enemy_infos[FMath::RandRange(0, ENEMY_MAX_CLASS - 1)]); // ランダムスポーン
+			//enemy_infos.Add(index, instance->enemy_infos[3]);
 		}
 	}
 }

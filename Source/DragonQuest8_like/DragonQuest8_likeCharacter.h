@@ -46,6 +46,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FPlayerDataAssetRecord player_record;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
+		void Damaged();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
+		void Attack();
+
 	void setRecord(FPlayerDataAssetRecord record);
 	FPlayerDataAssetRecord getRecord();
 	void Print_All_Infos();

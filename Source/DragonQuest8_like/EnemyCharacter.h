@@ -23,7 +23,7 @@ public:
 		void Damaged();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
-		void Dead();
+		void Attack();
 
 
 

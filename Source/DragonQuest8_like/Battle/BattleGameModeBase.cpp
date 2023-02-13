@@ -38,6 +38,7 @@ void ABattleGameModeBase::BeginPlay()
 	kill = 0;
 	enemy_deadcount = 0;
 	player_deadcount = 0;
+	flag = false;
 	state = Battle_State::Init;
 }
 
@@ -70,6 +71,13 @@ void ABattleGameModeBase::Tick(float DeltaTime)
 		Init();
 		break;
 	case Battle_State::Nop:
+		Nop();
+		break;
+	case Battle_State::Animation:
+		Animation();
+		break;
+	case Battle_State::AnimationFinished:
+		AnimationFinished();
 		break;
 	default:
 		break;
@@ -213,6 +221,13 @@ void  ABattleGameModeBase::setBattleCommandWidget(UBattle_Command_Widget* widget
 	}
 
 }
+void  ABattleGameModeBase::setBattleLogWidget(UBattle_Log_Widget* widget)
+{
+	battle_log_w = widget;
+	ensure(battle_log_w);
+}
+
+
 
 UBattle_Command_Widget* ABattleGameModeBase::getBattleCommandWidget()
 {
@@ -254,8 +269,9 @@ void ABattleGameModeBase::Init()
 {
 	battle_first_w->Init();
 	battle_command_w->Init(player_actors.Num() - player_deadcount, dead_id);
+	dead_id.Empty();
 	state = Battle_State::Command_Wait;
-	UKismetSystemLibrary::PrintString(this, "Command_Wait", true, true, FColor::Red, 10.f, TEXT("None"));
+	UKismetSystemLibrary::PrintString(this, "Command_Wait", true, true, FColor::Red, 3.f, TEXT("None"));
 
 }
 
@@ -267,49 +283,48 @@ void ABattleGameModeBase::Command_Wait()
 
 void ABattleGameModeBase::Attack()
 {
-	if (player_order.Num() == 0)
+	if (player_order.IsEmpty() && enemy_order.IsEmpty())
 	{
 		enemy_array = battle_command_w->getArray();
 		battle_first_w->Attack();
 
 		/* 敵味方をスタックに */
-		for (int32 index = 0; index < player_actors.Num() - player_deadcount; index++)
+		for (int32 index = 0; index < player_actors.Num(); index++)
 		{
+			if(player_actors[index]->getRecord().STATE == ALIVE)
 			player_order.Add(player_actors[index]);
 		}
 
-		for (int32 index = 0; index < enemy_num - enemy_deadcount; index++)
+		for (int32 index = 0; index < enemy_actors.Num(); index++)
 		{
+			if (enemy_actors[index]->getRecord().STATE == ALIVE)
 			enemy_order.Add(enemy_actors[index]);
 		}
 
 		/* それぞれのスタックを素早さ順にソート */
 
 		Stack_Sort();
+	}
 
+	if (!player_order.IsEmpty() || !enemy_order.IsEmpty())
+	{
 		/* ポップした順に攻撃を決めて実行　*/
 
-		Execute_Attack();
-
-		if (enemy_num == enemy_deadcount)
+		if (Execute_Attack())
 		{
-			TFunction<void(void)> Func = [this]() {
-				state = Battle_State::Finish;
-			};
-			FTimerHandle Handle;
-			FTimerManager& timerManager = GetWorld()->GetTimerManager();
-			GetWorld()->GetTimerManager().SetTimer(Handle, (TFunction<void(void)>&&)Func, 2.0f, false);
-			state = Battle_State::Nop;
-			UKismetSystemLibrary::PrintString(this, "Finish", true, true, FColor::Red, 10.f, TEXT("None"));
+			/* アニメーションが終わるまで待つ */
+			UKismetSystemLibrary::PrintString(this, "Animation", true, true, FColor::Black, 3.f, TEXT("None"));
+
+			state = Battle_State::Animation;
 		}
 		else
 		{
-			state = Battle_State::Init;
-			UKismetSystemLibrary::PrintString(this, "Init", true, true, FColor::Red, 10.f, TEXT("None"));
+			state = Battle_State::AnimationFinished;
 		}
 
 	}
 
+	//UKismetSystemLibrary::PrintString(this, "Attack", true, true, FColor::Yellow, 3.f, TEXT("None"));
 }
 
 void ABattleGameModeBase::Escape()
@@ -342,44 +357,57 @@ void ABattleGameModeBase::Stack_Sort()
 
 }
 
-void ABattleGameModeBase::Execute_Attack()
+bool ABattleGameModeBase::Execute_Attack()
 {
-	while (!player_order.IsEmpty() || !enemy_order.IsEmpty())
+	/* 両方のスタックが空で無い時 */
+	if (!player_order.IsEmpty() && !enemy_order.IsEmpty())
 	{
-		/* 両方のスタックが空で無い時 */
-		if (!player_order.IsEmpty() && !enemy_order.IsEmpty())
+		ADragonQuest8_likeCharacter* player = player_order[0];
+		AEnemyCharacter* enemy = enemy_order[0];
+		FPlayerDataAssetRecord p = player->getRecord();
+		FEnemyDataAssetRecord e = enemy->getRecord();
+		if (p.SPD >= e.SPD)
 		{
-			ADragonQuest8_likeCharacter* player = player_order.Top();
-			AEnemyCharacter* enemy = enemy_order.Top();
-			FPlayerDataAssetRecord p = player->getRecord();
-			FEnemyDataAssetRecord e = enemy->getRecord();
-			if (p.SPD >= e.SPD)
-			{
-				Calculate_PlayerAttack(p);
-				player_order.Pop();
-			}
-			else
-			{
-				Calculate_EnemyAttack(e);
-				enemy_order.Pop();
-			}
+			player_order.Pop();
+			return Calculate_PlayerAttack(p);
 		}
-		else if (player_order.IsEmpty()) // プレイヤーが全員攻撃し終わっているとき
+		else
 		{
-			Calculate_EnemyAttack(enemy_order.Pop()->getRecord());
+			enemy_order.Pop();
+			return Calculate_EnemyAttack(e);
 		}
-		else // 敵が全員攻撃し終わっているとき
-		{
-			Calculate_PlayerAttack(player_order.Pop()->getRecord());
-		}
+	}
+	else if (player_order.IsEmpty()) // プレイヤーが全員攻撃し終わっているとき
+	{
+		return Calculate_EnemyAttack(enemy_order.Pop()->getRecord());
+	}
+	else // 敵が全員攻撃し終わっているとき
+	{
+		return Calculate_PlayerAttack(player_order.Pop()->getRecord());
 	}
 }
 
-void ABattleGameModeBase::Calculate_PlayerAttack(FPlayerDataAssetRecord player)
+bool ABattleGameModeBase::Calculate_PlayerAttack(FPlayerDataAssetRecord player)
 {
+	battle_log_w->Update(player.NAME.ToString() + "is attaking");
 	int32 index = enemy_array[player.ID];
 	FEnemyDataAssetRecord enemy = enemy_actors[index]->getRecord();
-	if (player.STATE == ALIVE && enemy.STATE == ALIVE)
+
+	if (enemy.STATE == DEAD) // 攻撃対象が倒れていたらランダムな敵に攻撃
+	{
+		for (int32 i = 0; i < enemy_actors.Num(); i++)
+		{
+			if (enemy_actors[i]->getRecord().STATE == ALIVE)
+			{
+				index = i;
+				enemy = enemy_actors[i]->getRecord();
+				break;
+			}
+		}
+
+	}
+
+	if (player.STATE == ALIVE)
 	{
 		int32 damageA = player.ATK / 2 - enemy.DEF / 4;
 		int32 random = damageA / 16 + 1;
@@ -389,10 +417,21 @@ void ABattleGameModeBase::Calculate_PlayerAttack(FPlayerDataAssetRecord player)
 		if (result < 0)
 			result = 0;
 
+		FString str_hp = FString::Printf(TEXT("%d"), result);
+		FString s = enemy.NAME.ToString() + " " + str_hp;
+		TFunction<void(FString)> Func = [this](FString str) {
+			battle_log_w->Update("To " + str + " damages");
+		};
+		FTimerHandle Handle;
+		FTimerDelegate  TimerDelegate;
+		TimerDelegate.BindLambda((TFunction<void(FString)>&&)Func, s);
+		GetWorld()->GetTimerManager().SetTimer(Handle, TimerDelegate, 1.5f, false);
+
+
 		enemy.HP = enemy.HP - result;
 		if (enemy.HP < 0)
 			enemy.HP = 0;
-		UKismetSystemLibrary::PrintString(this, "damage_toEnemy: " + FString::FromInt(result), true, true, FColor::Cyan, 10.f, TEXT("None"));
+		UKismetSystemLibrary::PrintString(this, "damage_toEnemy: " + FString::FromInt(result), true, true, FColor::Cyan, 3.f, TEXT("None"));
 
 		enemy_actors[index]->setRecord(enemy);
 
@@ -402,22 +441,20 @@ void ABattleGameModeBase::Calculate_PlayerAttack(FPlayerDataAssetRecord player)
 		if (enemy.HP == 0)
 		{
 			enemy.STATE = DEAD;
-			enemy_deadcount++;
-			UKismetSystemLibrary::PrintString(this, "deadcount: " + FString::FromInt(enemy_deadcount), true, true, FColor::Yellow, 10.f, TEXT("None"));
 			dead_id.Add(enemy.ID);
 			enemy_actors[index]->setRecord(enemy);
-			enemy_actors[index]->Dead();
 		}
 
+	} 
 
-
-	}
+	return true;
 }
 
-void ABattleGameModeBase::Calculate_EnemyAttack(FEnemyDataAssetRecord enemy)
+bool ABattleGameModeBase::Calculate_EnemyAttack(FEnemyDataAssetRecord enemy)
 {
 	int32 index = FMath::RandRange(0, player_actors.Num() - 1);
 	FPlayerDataAssetRecord player = player_actors[index]->getRecord();
+
 	if (player.STATE == ALIVE && enemy.STATE == ALIVE)
 	{
 		int32 damageA = enemy.ATK / 2 - player.DEF / 4;
@@ -425,14 +462,16 @@ void ABattleGameModeBase::Calculate_EnemyAttack(FEnemyDataAssetRecord enemy)
 		int32 result = damageA + random;
 		if (result < 0)
 			result = 0;
+
 		player.HP = player.HP - result;
 		if (player.HP < 0)
 			player.HP = 0;
 
-		UKismetSystemLibrary::PrintString(this, "damage_toPlayer: " + FString::FromInt(result), true, true, FColor::Cyan, 10.f, TEXT("None"));
+		UKismetSystemLibrary::PrintString(this, "damage_toPlayer: " + FString::FromInt(result), true, true, FColor::Yellow, 5.f, TEXT("None"));
 		instance->player_infos.Find(player.ID)->HP -= result;
 		battle_first_w->Update(instance->player_infos);
 		player_actors[index]->setRecord(player);
+		player_actors[index]->Damaged();
 
 
 		if (player.HP == 0)
@@ -442,8 +481,13 @@ void ABattleGameModeBase::Calculate_EnemyAttack(FEnemyDataAssetRecord enemy)
 			player_actors[player.ID]->Destroy();
 			player_deadcount++;
 		}
-
+		return true;
 	}
+	else
+	{
+		return false;
+	}
+
 }
 
 void ABattleGameModeBase::Finish()
@@ -455,6 +499,47 @@ void ABattleGameModeBase::Finish()
 	};
 	FTimerHandle Handle;
 	FTimerManager& timerManager = GetWorld()->GetTimerManager();
-	GetWorld()->GetTimerManager().SetTimer(Handle, (TFunction<void(void)>&&)Func, 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(Handle, (TFunction<void(void)>&&)Func, 2.0f, false);
+	//enemy_actors.~TArray();
+	//player_actors.~TArray();
+	enemy_actors.Empty();
+	player_actors.Empty();
 	state = Battle_State::Nop;
 }
+
+void ABattleGameModeBase::Nop()
+{
+
+
+	//UKismetSystemLibrary::PrintString(this, "Nop", true, true, FColor::Yellow, 3.f, TEXT("None"));
+
+}
+
+void ABattleGameModeBase::setState(Battle_State s)
+{
+	state = s;
+}
+
+void ABattleGameModeBase::Animation()
+{
+	/* Nopと同じ */
+	//UKismetSystemLibrary::PrintString(this, "Animation", true, true, FColor::Yellow, 3.f, TEXT("None"));
+}
+void ABattleGameModeBase::AnimationFinished()
+{
+
+	UKismetSystemLibrary::PrintString(this, "AnimationFinished", true, true, FColor::Red, 3.f, TEXT("None"));
+	if (player_order.IsEmpty() && enemy_order.IsEmpty())
+	{
+		UKismetSystemLibrary::PrintString(this, "Init", true, true, FColor::Black, 3.f, TEXT("None"));
+
+		setState(Battle_State::Init);
+	}
+	else 
+	{
+		UKismetSystemLibrary::PrintString(this, "Attack", true, true, FColor::Black, 3.f, TEXT("None"));
+		setState(Battle_State::Attack);
+	}
+}
+
+

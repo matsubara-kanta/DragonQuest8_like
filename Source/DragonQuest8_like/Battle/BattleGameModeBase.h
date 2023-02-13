@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Battle_First_Widget.h"
+#include "Battle_Log_Widget.h"
 #include "Battle_State.h"
 #include "Components/Spacer.h"
 #include "Components/CanvasPanel.h"
@@ -49,6 +50,12 @@ public:
 		UBattle_First_Widget* getBattleFirstWidget();
 	UFUNCTION(Blueprintcallable, Category = "Myfunc")
 		void Init_Player();
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+		void setState(Battle_State state);
+	UFUNCTION(Blueprintcallable, Category = "Myfunc")
+
+	void setBattleLogWidget(UBattle_Log_Widget* widget);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<FVector> enemy_pos;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -71,6 +78,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAudioComponent* audio;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Player_Attack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Enemy_Attack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_Damage_Physics;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+
+	int32 enemy_deadcount; // ì|ÇµÇΩìGÇÃêî
+
+
+
+
+
+
+
 
 	~ABattleGameModeBase();
 	virtual void Tick(float DeltaTime) override;
@@ -85,6 +111,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UBattle_Command_Widget* battle_command_w;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UBattle_Log_Widget* battle_log_w;
+
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -97,21 +127,24 @@ private:
 	void Disable();
 	void Enable();
 	void Init();
+	void Nop();
 	void Finish();
+	void Animation();
+	void AnimationFinished();
 	void Stack_Sort();
-	void Execute_Attack();
-	void Calculate_PlayerAttack(FPlayerDataAssetRecord player);
-	void Calculate_EnemyAttack(FEnemyDataAssetRecord enemy);
+	bool Execute_Attack();
+	bool Calculate_PlayerAttack(FPlayerDataAssetRecord player);
+	bool Calculate_EnemyAttack(FEnemyDataAssetRecord enemy);
 
 	UWidgetSwitcher* switcher;
 	int32 enemy_id;
 	UDQ8GameInstance* instance;
 	TArray<int32> enemy_array;
-	int32 enemy_deadcount; // ì|ÇµÇΩìGÇÃêî
 	int32 player_deadcount; // ì|Ç≥ÇÍÇΩÉvÉåÉCÉÑÅ[ÇÃêî
 	TSet<int32> dead_id; // ì|ÇµÇΩìGÇÃID
 	TArray<ADragonQuest8_likeCharacter*> player_order; // èáî‘ÇåàÇﬂÇÈÉXÉ^ÉbÉN
 	TArray<AEnemyCharacter*> enemy_order;
+	bool flag;
 
 	/* ÉfÉoÉbÉOóp */
 	void PressedD();
