@@ -44,7 +44,18 @@ public:
 
 		void Print_All_Infos();
 
+	UFUNCTION(BlueprintCallable, Category = LoadingScreen)
+		virtual void PlayAsyncLoadingScreen(UUserWidget* Widget, bool bPlayUntilStopped, float PlayTime);
+
+	UFUNCTION(BlueprintCallable, Category = LoadingScreen)
+		virtual void EndLoadingScreen(UWorld* InLoadedWorld);
+
+
+	virtual void Init() override;
 
 	static UDQ8GameInstance* GetInstance();
 
+
+
+private:
 };

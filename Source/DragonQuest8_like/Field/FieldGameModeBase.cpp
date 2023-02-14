@@ -15,7 +15,7 @@ AFieldGameModeBase::AFieldGameModeBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/DragonQuest8_like/MyDragonQuest8_likeCharacter"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/DragonQuest8_like/Player/MyDragonQuest8_likeCharacter"));
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
@@ -71,8 +71,8 @@ void AFieldGameModeBase::Enemy_Infos_Init()
 	{
 		for (int32 index = 0; index < enemy_num; index++)
 		{
-			 enemy_infos.Add(index,instance->enemy_infos[FMath::RandRange(0, ENEMY_MAX_CLASS - 1)]); // ランダムスポーン
-			//enemy_infos.Add(index, instance->enemy_infos[3]);
+			enemy_infos.Add(index,instance->enemy_infos[FMath::RandRange(0, ENEMY_MAX_CLASS - 1)]); // ランダムスポーン
+			// enemy_infos.Add(index, instance->enemy_infos[3]);
 		}
 	}
 }
@@ -85,7 +85,6 @@ void AFieldGameModeBase::Spawn_Enemy()
 	for (int32 index = 0; index < enemy_num; ++index)
 	{
 			AActor* a = GetWorld()->SpawnActor<AActor>(enemy_infos.Find(index)->myclass); // スポーン処理
-
 			int32 x = FMath::RandRange(-2000, 2000);
 			while (-200 < x && x < 200)
 				x = FMath::RandRange(-2000, 2000);

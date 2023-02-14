@@ -2,8 +2,23 @@
 
 
 #include "DQ8GameInstance.h"
+#include "UObject/UObjectGlobals.h"
+#include "Engine/World.h"
+#include "Blueprint/UserWidget.h"
+#include "SlateExtras.h"
+#include "SlateBasics.h"
 #include "Engine/Engine.h"
+#include "Widgets/SWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "MoviePlayer.h"
+
+
+void UDQ8GameInstance::Init()
+{
+	Super::Init();
+	// レベルのロード完了後のタイミングにデリゲート
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UDQ8GameInstance::EndLoadingScreen);
+}
 
 UDQ8GameInstance* UDQ8GameInstance::GetInstance()
 {
@@ -60,4 +75,33 @@ void UDQ8GameInstance::Print_All_Infos()
 	}
 	UKismetSystemLibrary::PrintString(this, "enemy:", true, true, FColor::Cyan, 10.0f);
 
+}
+
+/* 非同期ロード画面表示 */ 
+
+void UDQ8GameInstance::PlayAsyncLoadingScreen(UUserWidget* Widget, bool bPlayUntilStopped, float PlayTime)
+{
+	if (Widget != NULL) {
+
+		FLoadingScreenAttributes LoadingScreen;
+
+		LoadingScreen.bAutoCompleteWhenLoadingCompletes = !bPlayUntilStopped;
+
+		// 表示最小時間(0以外の場合はロード完了後に指定した秒数経過まで再生し続ける)
+		LoadingScreen.MinimumLoadingScreenDisplayTime = PlayTime;
+
+		// ムービーの上に表示されるウィジェット、またはムービーがない場合は単にスタンドアロンで表示されるウィジェット
+		LoadingScreen.WidgetLoadingScreen = Widget->TakeWidget(); // Slateウィジェット生成(非同期)
+
+		// ロード画面再生
+		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+	}
+
+}
+
+/* ロード画面再生停止 */
+
+void UDQ8GameInstance::EndLoadingScreen(UWorld* InLoadedWorld)
+{
+	GetMoviePlayer()->StopMovie();
 }
