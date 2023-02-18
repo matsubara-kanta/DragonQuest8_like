@@ -21,10 +21,8 @@ void UBattle_First_Widget::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-// Tickˆ—
 void UBattle_First_Widget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
-	// Œp³Œ³ˆ—
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
 }
@@ -97,13 +95,15 @@ void UBattle_First_Widget::Change_State()
 	state = Battle_State::Escape;
 	bool flag; // “¦‚°‚ç‚ê‚é‚©‚Ç‚¤‚©
 	int random = FMath::RandRange(0, 9);
-	if (random % 3 != 0) {
-		flag = true;
-	}
-	else
-	{
-		flag = false;
-	}
+	//if (random % 3 != 0) {
+	//	flag = true;
+	//}
+	//else
+	//{
+	//	flag = false;
+	//}
+
+	flag = true;
 
 	UGameplayStatics::PlaySound2D(GetWorld(), Sound_Select);
 
@@ -129,7 +129,7 @@ void UBattle_First_Widget::Command_Wait()
 
 void UBattle_First_Widget::Attack()
 {
-	this->SetVisibility(ESlateVisibility::Hidden);
+	canvas->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UBattle_First_Widget::Escape()
@@ -139,7 +139,6 @@ void UBattle_First_Widget::Escape()
 
 void UBattle_First_Widget::Init()
 {
-	this->SetVisibility(ESlateVisibility::Visible);
-	this->SetIsEnabled(true);
+	canvas->SetVisibility(ESlateVisibility::Visible);
 	Battle_Switcher->SetActiveWidgetIndex(0);
 }

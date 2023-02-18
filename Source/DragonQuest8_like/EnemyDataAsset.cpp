@@ -33,6 +33,8 @@ void UEnemyDataAsset::Import()
         asset.GOLD = record->GOLD;
         asset.NAME = FText::FromName(Names[i]);
         asset.myclass = record->myclass;
+        asset.dead_time = record->dead_time;
+        asset.attack_time = record->attack_time;
         Data.Add(asset);
     }
 

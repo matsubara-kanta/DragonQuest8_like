@@ -56,6 +56,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<FPlayerText> Texts;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UCanvasPanel* canvas;
+
 
 	UBattle_First_Widget(const FObjectInitializer& ObjectInitializer);
 	UWidgetSwitcher* getSwitcher();

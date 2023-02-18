@@ -21,7 +21,16 @@ public:
 
 		UTextBlock* log_text;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+
+		UTextBlock* log_dead_text;
+
+
 	void Update(FString str);
+	void Dead_Update(FString str,float time);
+	void Init();
+	void Dead_Finish(FString str);
+	void Collapsed();
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;

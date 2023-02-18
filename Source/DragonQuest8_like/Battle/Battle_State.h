@@ -17,6 +17,8 @@ enum class Battle_State : uint8
 	Animation, // アニメーション中
 	AnimationFinished, // アニメーション終わり
 	Nop, // 何もしない
+	LevelUp, // レベルアップ
+	Wait, // 待つ
 };
 
 extern Battle_State state;

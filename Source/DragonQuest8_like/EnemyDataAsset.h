@@ -42,6 +42,12 @@ public:
 	UPROPERTY(EditAnywhere)
 		UClass* myclass = nullptr;
 
+	UPROPERTY(EditAnywhere)
+		float dead_time = 0.0f;
+
+	UPROPERTY(EditAnywhere)
+		float attack_time = 0.0f;
+
 };
 
 
@@ -82,6 +88,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UClass* myclass = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float dead_time = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float attack_time = 0.0f;
 
 };
 

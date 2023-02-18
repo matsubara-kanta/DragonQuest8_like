@@ -104,6 +104,7 @@ private:
 	TArray<int32> enemy_array; // (攻撃プレイヤーのインデックス、攻撃対象のインデックス)
 	int32 enemy_num;
 	int32 player_num;
+	bool flag; // バトルログ遅延制御用
 
 
 

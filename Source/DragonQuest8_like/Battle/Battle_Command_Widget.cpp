@@ -86,8 +86,8 @@ bool UBattle_Command_Widget::is_Spacer_Visible()
 
 void UBattle_Command_Widget::backCommand()
 {
-	disable_spacer->SetVisibility(ESlateVisibility::Hidden);
-	enemy_canvas->SetVisibility(ESlateVisibility::Hidden);
+	disable_spacer->SetVisibility(ESlateVisibility::Collapsed);
+	enemy_canvas->SetVisibility(ESlateVisibility::Collapsed);
 	party_canvas->SetRenderOpacity(1.0f);
 }
 
@@ -131,9 +131,9 @@ void UBattle_Command_Widget::Command_Wait(TArray<ADragonQuest8_likeCharacter*> p
 
 	if (player_num == enemy_array.Num() && state != Battle_State::Attack)
 	{
-		this->SetVisibility(ESlateVisibility::Hidden);
+		this->SetVisibility(ESlateVisibility::Collapsed);
 		state = Battle_State::Attack;
-		UKismetSystemLibrary::PrintString(this, "Attack");
+		//UKismetSystemLibrary::PrintString(this, "Attack");
 	}
 
 }

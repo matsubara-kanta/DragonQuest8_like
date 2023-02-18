@@ -88,6 +88,10 @@ public:
 		USoundBase* Sound_Damage_Physics;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* Sound_LevelUp;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 
 	int32 enemy_deadcount; // 倒した敵の数
 
@@ -129,9 +133,12 @@ private:
 	void Init();
 	void Nop();
 	void Finish();
+	void LevelUp();
+	void Wait();
 	void Animation();
 	void AnimationFinished();
 	void Stack_Sort();
+	void OpenField();
 	bool Execute_Attack();
 	bool Calculate_PlayerAttack(FPlayerDataAssetRecord player);
 	bool Calculate_EnemyAttack(FEnemyDataAssetRecord enemy);
@@ -142,9 +149,10 @@ private:
 	TArray<int32> enemy_array;
 	int32 player_deadcount; // 倒されたプレイヤーの数
 	TSet<int32> dead_id; // 倒した敵のID
-	TArray<ADragonQuest8_likeCharacter*> player_order; // 順番を決めるスタック
+	TArray<ADragonQuest8_likeCharacter*> player_order; // 順番を決めるキュー
 	TArray<AEnemyCharacter*> enemy_order;
-	bool flag;
+	bool first; // Attackで一回目だけキューを作成
+	int32 sum_exp; // 獲得合計経験値
 
 	/* デバッグ用 */
 	void PressedD();
